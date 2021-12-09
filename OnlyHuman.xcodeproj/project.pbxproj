@@ -11,6 +11,10 @@
 		FA69ECFB27622A590073C027 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA69ECFA27622A590073C027 /* ViewController.swift */; };
 		FA69ECFD27622A5A0073C027 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA69ECFC27622A5A0073C027 /* Assets.xcassets */; };
 		FA69ED0027622A5A0073C027 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA69ECFE27622A5A0073C027 /* Main.storyboard */; };
+		FA69ED0A27622D3C0073C027 /* NSImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA69ED0927622D3C0073C027 /* NSImageExtension.swift */; };
+		FA69ED0C27622D980073C027 /* CVPixelBufferExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA69ED0B27622D980073C027 /* CVPixelBufferExtension.swift */; };
+		FA69ED0E27622DE30073C027 /* alexmodel.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = FA69ED0D27622DE30073C027 /* alexmodel.mlmodel */; };
+		FA8D955227625AE400B8194C /* Capturer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8D955127625AE400B8194C /* Capturer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +24,10 @@
 		FA69ECFC27622A5A0073C027 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FA69ECFF27622A5A0073C027 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		FA69ED0127622A5A0073C027 /* OnlyHuman.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OnlyHuman.entitlements; sourceTree = "<group>"; };
+		FA69ED0927622D3C0073C027 /* NSImageExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSImageExtension.swift; sourceTree = "<group>"; };
+		FA69ED0B27622D980073C027 /* CVPixelBufferExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CVPixelBufferExtension.swift; sourceTree = "<group>"; };
+		FA69ED0D27622DE30073C027 /* alexmodel.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = alexmodel.mlmodel; sourceTree = "<group>"; };
+		FA8D955127625AE400B8194C /* Capturer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Capturer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,9 +62,13 @@
 			children = (
 				FA69ECF827622A590073C027 /* AppDelegate.swift */,
 				FA69ECFA27622A590073C027 /* ViewController.swift */,
+				FA8D955127625AE400B8194C /* Capturer.swift */,
+				FA69ED0D27622DE30073C027 /* alexmodel.mlmodel */,
 				FA69ECFC27622A5A0073C027 /* Assets.xcassets */,
+				FA69ED0B27622D980073C027 /* CVPixelBufferExtension.swift */,
 				FA69ECFE27622A5A0073C027 /* Main.storyboard */,
 				FA69ED0127622A5A0073C027 /* OnlyHuman.entitlements */,
+				FA69ED0927622D3C0073C027 /* NSImageExtension.swift */,
 			);
 			path = OnlyHuman;
 			sourceTree = "<group>";
@@ -132,6 +144,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA69ECFB27622A590073C027 /* ViewController.swift in Sources */,
+				FA69ED0C27622D980073C027 /* CVPixelBufferExtension.swift in Sources */,
+				FA69ED0E27622DE30073C027 /* alexmodel.mlmodel in Sources */,
+				FA8D955227625AE400B8194C /* Capturer.swift in Sources */,
+				FA69ED0A27622D3C0073C027 /* NSImageExtension.swift in Sources */,
 				FA69ECF927622A590073C027 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -278,13 +294,15 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need Camera to capture";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "AlexJean 2021";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = be.goodbrain.OnlyHuman;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -306,13 +324,15 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need Camera to capture";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "AlexJean 2021";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = be.goodbrain.OnlyHuman;
 				PRODUCT_NAME = "$(TARGET_NAME)";
