@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
-        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19455"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -707,55 +706,65 @@
             <objects>
                 <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="OnlyHuman" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="480" height="320"/>
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="310"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jrm-WT-ma2">
-                                <rect key="frame" x="334" y="292" width="138" height="20"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" drawsBackground="YES" usesSingleLineMode="YES" id="ZD6-TS-yMO">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <popUpButton identifier="inputSelector" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="onL-lr-eNT">
-                                <rect key="frame" x="5" y="288" width="181" height="25"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <popUpButtonCell key="cell" type="push" title="builtInCamera" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="eoK-qA-MMg" id="lrf-Hh-pfd">
-                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="menu"/>
-                                    <menu key="menu" id="JZJ-WU-kff">
-                                        <items>
-                                            <menuItem title="builtInCamera" state="on" id="eoK-qA-MMg"/>
-                                        </items>
-                                    </menu>
-                                </popUpButtonCell>
-                            </popUpButton>
-                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="NG6-e5-dcH">
-                                <rect key="frame" x="3" y="3" width="474" height="264"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="NG6-e5-dcH">
+                                <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" id="DJU-C2-sCe"/>
                             </imageView>
-                            <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zeg-E2-5ne">
-                                <rect key="frame" x="207" y="289" width="110" height="25"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="QgV-qm-RPH">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                    <objectValues>
-                                        <string></string>
-                                        <string>Transparency</string>
-                                        <string>LakeView</string>
-                                        <string>DimBar</string>
-                                        <string>Green</string>
-                                    </objectValues>
-                                </comboBoxCell>
-                                <connections>
-                                    <action selector="onClickBackgroundSelector:" target="XfG-lQ-9wD" id="M5f-nx-SH7"/>
-                                </connections>
-                            </comboBox>
+                            <box fixedFrame="YES" boxType="custom" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="K8n-uH-lbf">
+                                <rect key="frame" x="1" y="274" width="478" height="36"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES"/>
+                                <view key="contentView" id="1Kc-HS-ARP">
+                                    <rect key="frame" x="1" y="1" width="476" height="34"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jrm-WT-ma2">
+                                            <rect key="frame" x="331" y="6" width="138" height="20"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" drawsBackground="YES" usesSingleLineMode="YES" id="ZD6-TS-yMO">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <popUpButton identifier="inputSelector" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="onL-lr-eNT">
+                                            <rect key="frame" x="2" y="2" width="181" height="25"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="builtInCamera" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="eoK-qA-MMg" id="lrf-Hh-pfd">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="menu"/>
+                                                <menu key="menu" id="JZJ-WU-kff">
+                                                    <items>
+                                                        <menuItem title="builtInCamera" state="on" id="eoK-qA-MMg"/>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                        </popUpButton>
+                                        <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zeg-E2-5ne">
+                                            <rect key="frame" x="195" y="3" width="123" height="25"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="QgV-qm-RPH">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                <objectValues>
+                                                    <string></string>
+                                                    <string>LakeView</string>
+                                                    <string>DimBar</string>
+                                                    <string>Green</string>
+                                                    <string>Transparency</string>
+                                                </objectValues>
+                                            </comboBoxCell>
+                                            <connections>
+                                                <action selector="onClickBackgroundSelector:" target="XfG-lQ-9wD" id="M5f-nx-SH7"/>
+                                            </connections>
+                                        </comboBox>
+                                    </subviews>
+                                </view>
+                            </box>
                         </subviews>
                     </view>
                     <connections>
@@ -763,6 +772,7 @@
                         <outlet property="deviceSelector" destination="onL-lr-eNT" id="2Rx-TY-I2y"/>
                         <outlet property="msgLabel" destination="Jrm-WT-ma2" id="57d-mS-HP2"/>
                         <outlet property="onlyHumanView" destination="NG6-e5-dcH" id="flU-w7-jVl"/>
+                        <outlet property="panelBox" destination="K8n-uH-lbf" id="vZJ-ai-hqg"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
