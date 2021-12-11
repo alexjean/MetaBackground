@@ -24,9 +24,7 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
     private var m_model:alexmodel?
    
     private var captureSession:AVCaptureSession?
-
-    fileprivate var trackingArea: NSTrackingArea?
-
+    private var captureDevice:AVCaptureDevice?
     
     @IBAction func onClickBackgroundSelector(_ sender: Any) {
         let img: NSImage
@@ -55,24 +53,26 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
         super.init(coder: coder)
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        backgroundSelector.stringValue = "LakeView"
-        onClickBackgroundSelector([])
-        loadCounter+=1; print("viewDidLoad \(loadCounter) times")
-        
-        //trackingArea = NSTrackingArea(rect: view.bounds, options: [.activeInActiveApp, .mouseEnteredAndExited], owner: view, userInfo: nil)
-        //view.addTrackingArea(trackingArea!)
-        
+    private func prepareDeviceSelector()->[AVCaptureDevice] {
         let devices = Capturer.DiscoveryDevices()
         deviceSelector.removeAllItems()
         if devices.isEmpty {  deviceSelector.addItem(withTitle: "No video device!")  }
         for device in devices {  deviceSelector.addItem(withTitle: device.localizedName) }
+        return devices
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        backgroundSelector.stringValue = "LakeView"
+        onClickBackgroundSelector([])
+        loadCounter+=1;
+        printMessageTime(msg: "---viewDidLoad \(loadCounter) times")
+        
+        let devices = prepareDeviceSelector()
+        captureDevice = devices.first
         if captureSession == nil {
-            captureSession = Capturer.Setup(device: devices.first, preview: onlyHumanView, controller: self)
+            captureSession = Capturer.setupSession(dataDelegate: self)
         }
-        guard let session = captureSession else { return }
-        if !session.isRunning  { session.startRunning() }
     }
     
     override var representedObject: Any? {
@@ -80,12 +80,43 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
         }
     }
     
+    func printMessageTime(msg:String) {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm:ss"
+        print(msg + " " + formatter.string(from: Date.now))
+    }
+    
+    override func viewDidAppear() {
+        if let session = captureSession {
+            if !session.isRunning  {
+                if session.inputs.isEmpty {
+                    guard let device = captureDevice else {
+                        printMessageTime(msg: "...No device to startCapture")
+                        return
+                    }
+                    Capturer.addInput(device: device, session: session)
+                }
+                session.startRunning()
+                printMessageTime(msg: "...startCapture")
+            }
+        }
+    }
+    
+    override func viewWillDisappear() {
+        if let session = captureSession {
+            if session.isRunning  {
+                Capturer.removeInput(captureSession: session) // stopRunning in removeInput
+                printMessageTime(msg: "===stopCapture")
+            }
+        }
+    }
+    
     public func panel(show:Bool) {
         if panelBox.isHidden == (!show) { return }
-        let b0 = onlyHumanView.bounds, size0:CGSize
-        if show { size0 = CGSize(width: b0.width, height: b0.height + panelBox.bounds.height + 4)  }
-        else    { size0 = CGSize(width: b0.width, height: b0.height)                          }
         panelBox.isHidden = show ? false: true
+//        let b0 = onlyHumanView.bounds, size0:CGSize
+//        if show { size0 = CGSize(width: b0.width, height: b0.height + panelBox.bounds.height + 4)  }
+//        else    { size0 = CGSize(width: b0.width, height: b0.height)                          }
         //view.setFrameSize(size0)
     }
     /*
@@ -132,7 +163,7 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
     func doAlexMLHandler(mlConfig:MLModelConfiguration, src pixelBuffer:CVPixelBuffer, background bgBuffer:CVPixelBuffer) {
         self.debugTotal+=1
         if self.debugRunning {
-            print("Debug blocking dropframe \(self.debugCounter)");
+            // print("Debug blocking dropframe \(self.debugCounter)");
             self.debugCounter+=1
             return
         }
