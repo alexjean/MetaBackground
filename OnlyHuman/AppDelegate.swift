@@ -30,7 +30,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // this application only 1 viewController
         guard let nSViewController = win.contentViewController else { return }
         let viewController = nSViewController as! ViewController
-        viewController.panel(show:true)
+        viewController.panel(hide:false)
     }
     
     func applicationDidResignActive(_ notification: Notification) {
@@ -42,7 +42,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // this application only 1 viewController
         guard let nSViewController = win.contentViewController else { return }
         let viewController = nSViewController as! ViewController
-        viewController.panel(show:false)
+        viewController.panel(hide:true)
     }
 
 }

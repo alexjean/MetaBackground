@@ -688,7 +688,7 @@
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="196" y="240" width="480" height="270"/>
-                        <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1055"/>
                         <connections>
                             <outlet property="delegate" destination="B8D-0N-5wS" id="98r-iN-zZc"/>
                         </connections>
@@ -707,22 +707,22 @@
                 <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="OnlyHuman" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
                         <rect key="frame" x="0.0" y="0.0" width="480" height="310"/>
-                        <autoresizingMask key="autoresizingMask"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NG6-e5-dcH">
+                            <imageView autoresizesSubviews="NO" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" id="NG6-e5-dcH">
                                 <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" id="DJU-C2-sCe"/>
                             </imageView>
-                            <box fixedFrame="YES" boxType="custom" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="K8n-uH-lbf">
-                                <rect key="frame" x="1" y="274" width="478" height="36"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES"/>
+                            <box boxType="custom" cornerRadius="4" title="Box" id="K8n-uH-lbf">
+                                <rect key="frame" x="0.0" y="274" width="480" height="36"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <view key="contentView" id="1Kc-HS-ARP">
-                                    <rect key="frame" x="1" y="1" width="476" height="34"/>
+                                    <rect key="frame" x="1" y="1" width="478" height="34"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jrm-WT-ma2">
-                                            <rect key="frame" x="331" y="6" width="138" height="20"/>
+                                            <rect key="frame" x="333" y="6" width="138" height="20"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" drawsBackground="YES" usesSingleLineMode="YES" id="ZD6-TS-yMO">
                                                 <font key="font" metaFont="system"/>
@@ -731,7 +731,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton identifier="inputSelector" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="onL-lr-eNT">
-                                            <rect key="frame" x="2" y="2" width="181" height="25"/>
+                                            <rect key="frame" x="4" y="2" width="181" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="builtInCamera" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="eoK-qA-MMg" id="lrf-Hh-pfd">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -744,7 +744,7 @@
                                             </popUpButtonCell>
                                         </popUpButton>
                                         <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zeg-E2-5ne">
-                                            <rect key="frame" x="195" y="3" width="123" height="25"/>
+                                            <rect key="frame" x="197" y="3" width="123" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="QgV-qm-RPH">
                                                 <font key="font" metaFont="system"/>

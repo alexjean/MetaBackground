@@ -34,7 +34,13 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
             case "Green":   img = NSImage(size: NSSize(width: 1280, height: 720))
                             img.fillWith(color: NSColor(red: 0.6, green: 1, blue: 0.47, alpha: 1))
                             break
-            //case "Transparency":                    break
+            case "Transparency":
+                            img = NSImage(size: NSSize(width: 1280, height: 720))
+                            img.fillWith(color: NSColor.black)
+                            print(String(format:"view  %.0f  %0.f y=%.0f -- humanView %.0f %.0f y=%.0f"
+                                         , view.bounds.height, view.frame.height, view.frame.origin.y
+                                         , onlyHumanView.bounds.height, onlyHumanView.frame.height, onlyHumanView.frame.origin.y))
+                            break
             default:        img = NSImage(size: NSSize(width: 1280, height: 720))
                             img.fillWith(color: NSColor.white)
                             break
@@ -111,42 +117,46 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
         }
     }
     
-    public func panel(show:Bool) {
-        if panelBox.isHidden == (!show) { return }
-        panelBox.isHidden = show ? false: true
-//        let b0 = onlyHumanView.bounds, size0:CGSize
-//        if show { size0 = CGSize(width: b0.width, height: b0.height + panelBox.bounds.height + 4)  }
-//        else    { size0 = CGSize(width: b0.width, height: b0.height)                          }
-        //view.setFrameSize(size0)
-    }
-    /*
-    private func setWindowBar(show:Bool) {
-        guard let win = self.view.window else { return }
-        let hasBar = win.hasTitleBar
-        print("mouseOver show \(show) bar \(hasBar)")
-        if  hasBar {
-            if show { return }
-            win.styleMask.remove(.titled)
-        } else {
-            if win.isKeyWindow { win.styleMask.update(with: .titled) }
-            else if show { win.styleMask.update(with: .titled) }
+    public func panel(hide:Bool) {
+        if panelBox.isHidden == hide { return }
+        guard let win = view.window else {
+            printMessageTime(msg: "Odd thing, no view.window")
+            return
         }
+        panelBox.isHidden = hide
+        let sizeWin:CGSize
+        var width0 = win.frame.width, height0 = win.frame.height
+        let offset = panelBox.frame.height+2
+        var imgHeight = hide ? (height0-offset) : height0
+        if (hide) {
+            let width1 = imgHeight * 16 / 9
+            let height1 = width0 * 9 / 16
+            if width0 > (width1 + 0.001) {
+                width0 = width1
+            } else if imgHeight > (height1 + 0.001) {
+                imgHeight = height1
+            }
+            sizeWin = CGSize(width: width0, height: imgHeight)
+            let winFrame = NSRect(origin: win.frame.origin, size: sizeWin)
+            win.setFrame(winFrame, display: true)
+            onlyHumanView.setFrameOrigin(NSPoint.zero)
+            onlyHumanView.setFrameSize(NSSize(width:width0, height: imgHeight))
+            print(String(format:"view  %.0f  %0.f y=%.0f -- humanView %.0f %.0f y=%.0f"
+                         , view.bounds.height, view.frame.height, view.bounds.origin.y
+                         , onlyHumanView.bounds.height, onlyHumanView.frame.height, onlyHumanView.bounds.origin.y))
+           return
+        }
+        sizeWin = CGSize(width: width0, height: imgHeight + offset)
+        let winFrame = NSRect(origin: win.frame.origin, size: sizeWin)
+        //view.autoresizingMask = NSView.AutoresizingMask.none
+        //view.translatesAutoresizingMaskIntoConstraints = true
+        win.setFrame(winFrame, display: true)
+        //view.setBoundsSize(size0)    // Bounds一設，subview constraints全失效
+        //onlyHumanView.setFrameOrigin(NSPoint.zero)
+        //onlyHumanView.setFrameSize(NSSize(width:width0, height: imgHeight))
+        //panelBox.setFrameOrigin(NSPoint(x:0 , y:imgHeight))
     }
     
-    
-    override func mouseEntered(with event: NSEvent) {
-        // mouseEntered will fired when active comboBox list then select
-        // so unusable , change to appDelegate 
-        super.mouseEntered(with: event)
-        setWindowBar(show:true)
-    }
-    
-    override func mouseExited(with event: NSEvent) {
-        super.mouseExited(with: event)
-        setWindowBar(show:false)
-    }
-    */
-
     func captureOutput(_ output: AVCaptureOutput, didDrop sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         print("failed", Date())
     }
@@ -156,7 +166,6 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
         guard let buf = backgroundBuffer else { return }
         doAlexMLHandler(mlConfig: self.m_mlConfig, src: pixelBuffer, background: buf)
     }
-
     
     var debugRunning: Bool = false
     var debugCounter = 0, debugTotal = 0
