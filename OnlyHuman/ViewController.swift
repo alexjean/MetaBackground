@@ -71,6 +71,8 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
         super.viewDidLoad()
         backgroundSelector.stringValue = "LakeView"
         onClickBackgroundSelector([])
+        setupVideoConstraints()
+        onlyHumanView.translatesAutoresizingMaskIntoConstraints = false
         loadCounter+=1;
         printMessageTime(msg: "---viewDidLoad \(loadCounter) times")
         
@@ -133,22 +135,40 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
 //
     }
     
+    // setup constraint by panelBox.isHide
+    // the topAnchor's priority of Video in storybord is set to 900
+    private var constraintToPanelBoxBottom: NSLayoutConstraint?
+    private var constraintToViewTop:NSLayoutConstraint?
+    private func setupVideoConstraints() {
+        if constraintToPanelBoxBottom == nil {
+            constraintToPanelBoxBottom = onlyHumanView.topAnchor.constraint(equalTo: panelBox.bottomAnchor)
+        }
+        if constraintToViewTop == nil {
+            constraintToViewTop = onlyHumanView.topAnchor.constraint(equalTo: view.topAnchor)
+        }
+        onlyHumanView.translatesAutoresizingMaskIntoConstraints = false
+        // put .isActive = false first to prevent annoying Layout warning
+        if panelBox.isHidden {
+            constraintToPanelBoxBottom?.isActive = false
+            constraintToViewTop?.isActive = true
+        } else {
+            constraintToViewTop?.isActive = false
+            constraintToPanelBoxBottom?.isActive = true
+        }
+    }
+    
     public func panel(hide:Bool) {
         if panelBox.isHidden == hide { return }
         guard let win = view.window else {
             printMessageTime(msg: "Odd thing, no view.window")
             return
         }
-        //view.translatesAutoresizingMaskIntoConstraints = false
-        //view.autoresizingMask = NSView.AutoresizingMask.none
         panelBox.isHidden = hide
+        setupVideoConstraints()
         let sizeWin:CGSize
         var width0 = win.frame.width, height0 = win.frame.height
         let offset = panelBox.frame.height+2
         var imgHeight = hide ? (height0-offset) : height0
-        guard let videoView = onlyHumanView else { return }
-//        videoView.translatesAutoresizingMaskIntoConstraints = false
-//        for constraint in videoView.constraints {  videoView.removeConstraint(constraint)   }
         if (hide) {
             let width1 = imgHeight * 16 / 9
             let height1 = width0 * 9 / 16
@@ -159,30 +179,14 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
             }
             sizeWin = CGSize(width: width0, height: imgHeight)
             let winFrame = NSRect(origin: win.frame.origin, size: sizeWin)
-            videoView.translatesAutoresizingMaskIntoConstraints = true
             win.setFrame(winFrame, display: true)
-            videoView.setFrameOrigin(NSPoint.zero)
-            videoView.setFrameSize(NSSize(width:width0, height: imgHeight))
-            debugDump(child: onlyHumanView, tag: "0")
             return
         }
-        sizeWin = CGSize(width: width0, height: imgHeight + offset * 1.5)
-        debugDump(child: onlyHumanView, tag: "1")
-
+        sizeWin = CGSize(width: width0, height: imgHeight + offset * 1)
         let winFrame = NSRect(origin: win.frame.origin, size: sizeWin)
-//        NSLayoutConstraint.activate([
-//                    videoView.topAnchor.constraint(equalTo: view.topAnchor, constant: offset),
-//                    videoView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-//                    videoView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-//                    videoView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-//                    ])
         win.setFrame(winFrame, display: true)  // 當autoresizeMask on時，這條會改 minY
-        debugDump(child: onlyHumanView, tag: "2")
         //let constraint = NSAutoresizingMaskLayoutConstraint  // autoresizingMaskYAxisAnchor
         //view.setBoundsSize(sizeWin)    // Bounds一設，subview constraints全失效
-        //videoView.setFrameSize(NSSize(width:width0, height: imgHeight))
-        //videoView.setFrameOrigin(NSPoint.zero)
-        debugDump(child: onlyHumanView, tag: "3")
     }
     
     func captureOutput(_ output: AVCaptureOutput, didDrop sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
