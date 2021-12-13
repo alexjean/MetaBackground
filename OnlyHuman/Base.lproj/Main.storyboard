@@ -710,7 +710,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView autoresizesSubviews="NO" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="499" verticalCompressionResistancePriority="499" translatesAutoresizingMaskIntoConstraints="NO" id="NG6-e5-dcH">
-                                <rect key="frame" x="0.0" y="0.0" width="480" height="273"/>
+                                <rect key="frame" x="0.0" y="0.0" width="480" height="274"/>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" id="DJU-C2-sCe"/>
                             </imageView>
                             <box boxType="custom" cornerRadius="4" title="Box" id="K8n-uH-lbf">
@@ -745,16 +745,17 @@
                                         <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zeg-E2-5ne">
                                             <rect key="frame" x="197" y="3" width="123" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="QgV-qm-RPH">
+                                            <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="6" id="QgV-qm-RPH">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 <objectValues>
                                                     <string></string>
+                                                    <string>YouSelect</string>
                                                     <string>LakeView</string>
                                                     <string>DimBar</string>
                                                     <string>Green</string>
-                                                    <string>Transparency</string>
+                                                    <string>Black</string>
                                                 </objectValues>
                                             </comboBoxCell>
                                             <connections>
@@ -767,7 +768,7 @@
                         </subviews>
                         <constraints>
                             <constraint firstItem="NG6-e5-dcH" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="FHH-Oa-weA"/>
-                            <constraint firstItem="NG6-e5-dcH" firstAttribute="top" secondItem="K8n-uH-lbf" secondAttribute="bottom" priority="900" constant="1" id="Zi2-6H-JSL"/>
+                            <constraint firstItem="NG6-e5-dcH" firstAttribute="top" secondItem="K8n-uH-lbf" secondAttribute="bottom" priority="900" id="Zi2-6H-JSL"/>
                             <constraint firstAttribute="trailing" secondItem="NG6-e5-dcH" secondAttribute="trailing" id="ihw-dB-hrD"/>
                             <constraint firstAttribute="bottom" secondItem="NG6-e5-dcH" secondAttribute="bottom" id="u9r-mN-AyT"/>
                         </constraints>
@@ -776,8 +777,8 @@
                         <outlet property="backgroundSelector" destination="zeg-E2-5ne" id="DXd-uF-OHt"/>
                         <outlet property="deviceSelector" destination="onL-lr-eNT" id="2Rx-TY-I2y"/>
                         <outlet property="msgLabel" destination="Jrm-WT-ma2" id="57d-mS-HP2"/>
-                        <outlet property="onlyHumanView" destination="NG6-e5-dcH" id="flU-w7-jVl"/>
                         <outlet property="panelBox" destination="K8n-uH-lbf" id="vZJ-ai-hqg"/>
+                        <outlet property="videoView" destination="NG6-e5-dcH" id="flU-w7-jVl"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

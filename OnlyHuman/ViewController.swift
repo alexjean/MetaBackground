@@ -13,7 +13,7 @@ import Vision
 class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
 
     @IBOutlet var msgLabel: NSTextField!
-    @IBOutlet var onlyHumanView: NSImageView!
+    @IBOutlet var videoView: NSImageView!
     @IBOutlet var deviceSelector: NSPopUpButton!
     @IBOutlet var backgroundSelector: NSComboBox!
     @IBOutlet var panelBox: NSBox!
@@ -27,27 +27,26 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
     private var captureDevice:AVCaptureDevice?
     
     @IBAction func onClickBackgroundSelector(_ sender: Any) {
-        let img: NSImage
+        let img0 = NSImage(size: NSSize(width: 1280, height: 720))
+        var img1: NSImage? = nil
         switch(backgroundSelector.stringValue) {
-            case "LakeView":img = NSImage(imageLiteralResourceName: "LakeView");   break
-            case "DimBar":  img = NSImage(imageLiteralResourceName: "DimBar");     break
-            case "Green":   img = NSImage(size: NSSize(width: 1280, height: 720))
-                            img.fillWith(color: NSColor(red: 0.6, green: 1, blue: 0.47, alpha: 1))
-                            break
-            case "Transparency":
-                            img = NSImage(size: NSSize(width: 1280, height: 720))
-                            img.fillWith(color: NSColor.black)
-                            print(String(format:"view  %.0f  %0.f y=%.0f -- humanView %.0f %.0f y=%.0f"
-                                         , view.bounds.height, view.frame.height, view.frame.origin.y
-                                         , onlyHumanView.bounds.height, onlyHumanView.frame.height, onlyHumanView.frame.origin.y))
-                            break
-            default:        img = NSImage(size: NSSize(width: 1280, height: 720))
-                            img.fillWith(color: NSColor.white)
-                            break
+        case "LakeView":  img1 = NSImage(imageLiteralResourceName: "LakeView");                    break
+        case "DimBar":    img1 = NSImage(imageLiteralResourceName: "DimBar");                      break
+        case "Green":     img0.fillWith(color: NSColor(red: 0.6, green: 1, blue: 0.47, alpha: 1)); break
+        case "Black":     img0.fillWith(color: NSColor.black);                                     break
+        case "YouSelect": img1 = chooseImageFile();
+                          if img1 == nil { return }
+                          break
+        default:          img0.fillWith(color: NSColor.white);                                     break
+        }
+        self.alexOutput = nil
+        guard let img = img1 else {
+            backgroundBuffer = img0.pixelBuffer()
+            videoView.image = img0
+            return
         }
         backgroundBuffer = img.pixelBuffer()?.resizeCropTo(width: 1280, height: 720)
-        onlyHumanView.image = img
-        self.alexOutput = nil
+        videoView.image = img
     }
     
     private var loadCounter:Int = 0
@@ -72,7 +71,7 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
         backgroundSelector.stringValue = "LakeView"
         onClickBackgroundSelector([])
         setupVideoConstraints()
-        onlyHumanView.translatesAutoresizingMaskIntoConstraints = false
+        videoView.translatesAutoresizingMaskIntoConstraints = false
         loadCounter+=1;
         printMessageTime(msg: "---viewDidLoad \(loadCounter) times")
         
@@ -95,6 +94,7 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
     }
     
     override func viewDidAppear() {
+        view.window?.level = .floating
         if let session = captureSession {
             if !session.isRunning  {
                 if session.inputs.isEmpty {
@@ -136,17 +136,17 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
     }
     
     // setup constraint by panelBox.isHide
-    // the topAnchor's priority of Video in storybord is set to 900
+    // the topAnchor's priority of VideoView in storybord is set to 900
     private var constraintToPanelBoxBottom: NSLayoutConstraint?
     private var constraintToViewTop:NSLayoutConstraint?
     private func setupVideoConstraints() {
         if constraintToPanelBoxBottom == nil {
-            constraintToPanelBoxBottom = onlyHumanView.topAnchor.constraint(equalTo: panelBox.bottomAnchor)
+            constraintToPanelBoxBottom = videoView.topAnchor.constraint(equalTo: panelBox.bottomAnchor)
         }
         if constraintToViewTop == nil {
-            constraintToViewTop = onlyHumanView.topAnchor.constraint(equalTo: view.topAnchor)
+            constraintToViewTop = videoView.topAnchor.constraint(equalTo: view.topAnchor)
         }
-        onlyHumanView.translatesAutoresizingMaskIntoConstraints = false
+        videoView.translatesAutoresizingMaskIntoConstraints = false
         // put .isActive = false first to prevent annoying Layout warning
         if panelBox.isHidden {
             constraintToPanelBoxBottom?.isActive = false
@@ -155,6 +155,7 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
             constraintToViewTop?.isActive = false
             constraintToPanelBoxBottom?.isActive = true
         }
+        
     }
     
     public func panel(hide:Bool) {
@@ -167,7 +168,7 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
         setupVideoConstraints()
         let sizeWin:CGSize
         var width0 = win.frame.width, height0 = win.frame.height
-        let offset = panelBox.frame.height+2
+        let offset = panelBox.frame.height
         var imgHeight = hide ? (height0-offset) : height0
         if (hide) {
             let width1 = imgHeight * 16 / 9
@@ -227,7 +228,7 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
             let image = CIImage(cvPixelBuffer: buf, options: [:])
             let cgImage = CIContext(options: nil).createCGImage(image, from: image.extent)!
             DispatchQueue.main.async {
-                self.onlyHumanView.image = NSImage(cgImage: cgImage, size: NSSize(width: cgImage.width, height: cgImage.height))
+                self.videoView.image = NSImage(cgImage: cgImage, size: NSSize(width: cgImage.width, height: cgImage.height))
                 let duration =  timeMark.timeIntervalSinceNow
                 self.msgLabel.stringValue = String(format: "%.0f%% dropped    %.0fms", Float(self.debugCounter)/Float(self.debugTotal)*100,-duration*1000)
             }
@@ -235,7 +236,26 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
         }
     }
     
-    
+    func chooseImageFile() -> NSImage? {
+        let dialog = NSOpenPanel();
+        dialog.title                   = "Choose a image file";
+        dialog.showsResizeIndicator    = true;
+        dialog.showsHiddenFiles        = false;
+        dialog.canChooseDirectories    = true;
+        dialog.canCreateDirectories    = true;
+        dialog.allowsMultipleSelection = false;
+        dialog.allowedContentTypes     = [.image]
+
+        if (dialog.runModal() == NSApplication.ModalResponse.OK) {
+            guard let url = dialog.url else { return nil }
+            printMessageTime(msg: String(format: "Selected url: %@", url.debugDescription))
+            let img = NSImage(contentsOf: url)
+            if (img == nil) { print("Something wrong!") }
+            return img
+        } else {  // User clicked on "Cancel"
+            return nil
+        }
+    }
 
 }
 
