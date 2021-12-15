@@ -212,9 +212,12 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
         }
         else  { self.debugRunning = true }
         let timeMark = Date.now
+        
         DispatchQueue.global(qos: .userInteractive).async  {
+            // <A> resizeCropTo cost 10ms
             guard let copy = pixelBuffer.resizeCropTo(width: 1280, height: 720) else { return }
             guard let model = self.m_model else { return }
+            // <B> model cost 46ms
             let out0 = self.alexOutput
             let r1 = out0?.r1o, r2 = out0?.r2o
             let r3 = out0?.r3o, r4 = out0?.r4o
@@ -223,10 +226,13 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
                 let out1 = try model.prediction(input: alexInput)
                 self.alexOutput = out1
             } catch { fatalError("model.prediction error!\r\n ==>"+error.localizedDescription) }  // Failed to src yuv2
-            
+
             guard let buf = self.alexOutput?.fgr else { return }
+            // <C> buf to CGImage two line cost 20ms
+            // <A>+<C> cost 26ms , <A>+<B>+<C> cost 65ms
             let image = CIImage(cvPixelBuffer: buf, options: [:])
             let cgImage = CIContext(options: nil).createCGImage(image, from: image.extent)!
+
             DispatchQueue.main.async {
                 self.videoView.image = NSImage(cgImage: cgImage, size: NSSize(width: cgImage.width, height: cgImage.height))
                 let duration =  timeMark.timeIntervalSinceNow
@@ -234,6 +240,7 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
             }
             self.debugRunning = false
         }
+        
     }
     
     func chooseImageFile() -> NSImage? {
