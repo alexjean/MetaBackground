@@ -64,5 +64,38 @@ class Capturer: NSObject {
             }
         }
     }
+    
+    static func startCapture(session :AVCaptureSession?, device captureDevice:AVCaptureDevice?) {
+        if let session = session {
+            if !session.isRunning  {
+                if session.inputs.isEmpty {
+                    guard let device = captureDevice else {
+                        printMessageTime(msg: "...No device to startCapture")
+                        return
+                    }
+                    Capturer.addInput(device: device, session: session)
+                }
+                session.startRunning()
+                printMessageTime(msg: "...startCapture")
+            }
+        }
+    }
+    
+    static func stopCapture(session: AVCaptureSession?) {
+        if let session = session {
+            if session.isRunning  {
+                Capturer.removeInput(captureSession: session) // stopRunning in removeInput
+                printMessageTime(msg: "===stopCapture")
+            }
+        }
+    }
+    
+    static func printMessageTime(msg:String) {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm:ss"
+        print(msg + " " + formatter.string(from: Date.now))
+    }
+
+
 
 }

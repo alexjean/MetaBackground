@@ -23,8 +23,18 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
     private var m_mlConfig:MLModelConfiguration
     private var m_model:alexmodel?
    
-    private var captureSession:AVCaptureSession?
-    private var captureDevice:AVCaptureDevice?
+    private var m_captureSession:AVCaptureSession?
+    private var m_captureDevice:AVCaptureDevice?
+    private var m_captureDevices:[AVCaptureDevice] = []
+    
+    private var loadCounter:Int = 0
+    required init?(coder: NSCoder) {
+        m_mlConfig=MLModelConfiguration()
+        m_mlConfig.allowLowPrecisionAccumulationOnGPU = true
+        m_mlConfig.computeUnits = .cpuAndGPU
+        m_model = try? alexmodel(configuration: m_mlConfig)
+        super.init(coder: coder)
+    }
     
     @IBAction func onClickBackgroundSelector(_ sender: Any) {
         let img0 = NSImage(size: NSSize(width: 1280, height: 720))
@@ -49,21 +59,40 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
         videoView.image = img
     }
     
-    private var loadCounter:Int = 0
-    required init?(coder: NSCoder) {
-        m_mlConfig=MLModelConfiguration()
-        m_mlConfig.allowLowPrecisionAccumulationOnGPU = true
-        m_mlConfig.computeUnits = .cpuAndGPU
-        m_model = try? alexmodel(configuration: m_mlConfig)
-        super.init(coder: coder)
+    @IBAction func onClickDeviceSelector(_ sender: Any) {
+        guard let button = sender as? NSPopUpButton else {
+            return
+        }
+        let index = button.indexOfSelectedItem
+        print("device \(index) \(button.itemTitle(at: index)) selected!")
+        let count = m_captureDevices.count
+        if count <= index {
+            print("Strange \(count) devices , we got index \(index) !")
+            return
+        }
+        let device = m_captureDevices[index]
+        if !device.isConnected { return }
+        m_captureDevice = device
+        Capturer.stopCapture(session: m_captureSession)
+        Capturer.startCapture(session: m_captureSession, device: device)
     }
     
-    private func prepareDeviceSelector()->[AVCaptureDevice] {
-        let devices = Capturer.DiscoveryDevices()
+    private func buildDeviceSelector(devices:[AVCaptureDevice]) {
         deviceSelector.removeAllItems()
-        if devices.isEmpty {  deviceSelector.addItem(withTitle: "No video device!")  }
-        for device in devices {  deviceSelector.addItem(withTitle: device.localizedName) }
-        return devices
+        if devices.isEmpty {
+            deviceSelector.addItem(withTitle: "No video device!")
+            return
+        }
+        for device in devices {
+            deviceSelector.addItem(withTitle: device.localizedName)
+        }
+    }
+    
+    @objc func dropdownMenuOpened() {
+        let devices = Capturer.DiscoveryDevices()
+        if (devices.count == m_captureDevices.count) { return }
+        m_captureDevices = devices
+        buildDeviceSelector(devices: devices)
     }
     
     override func viewDidLoad() {
@@ -75,11 +104,18 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
         loadCounter+=1;
         printMessageTime(msg: "---viewDidLoad \(loadCounter) times")
         
-        let devices = prepareDeviceSelector()
-        captureDevice = devices.first
-        if captureSession == nil {
-            captureSession = Capturer.setupSession(dataDelegate: self)
+        let devices = Capturer.DiscoveryDevices()
+        buildDeviceSelector(devices: devices)
+        m_captureDevice = devices.first
+        m_captureDevices = devices
+        if m_captureSession == nil {
+            m_captureSession = Capturer.setupSession(dataDelegate: self)
         }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(dropdownMenuOpened),
+                                               name: NSPopUpButton.willPopUpNotification,
+                                               object: nil)
+
     }
     
     override var representedObject: Any? {
@@ -93,46 +129,14 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
         print(msg + " " + formatter.string(from: Date.now))
     }
     
+    
     override func viewDidAppear() {
         view.window?.level = .floating
-        if let session = captureSession {
-            if !session.isRunning  {
-                if session.inputs.isEmpty {
-                    guard let device = captureDevice else {
-                        printMessageTime(msg: "...No device to startCapture")
-                        return
-                    }
-                    Capturer.addInput(device: device, session: session)
-                }
-                session.startRunning()
-                printMessageTime(msg: "...startCapture")
-            }
-        }
+        Capturer.startCapture(session:m_captureSession, device: m_captureDevice)
     }
     
     override func viewWillDisappear() {
-        if let session = captureSession {
-            if session.isRunning  {
-                Capturer.removeInput(captureSession: session) // stopRunning in removeInput
-                printMessageTime(msg: "===stopCapture")
-            }
-        }
-    }
-    
-    private func debugDump(child:NSView, tag:String) {
-//        guard let parent = child.superview else {
-//            print(String(format:"%s -- childView %.0f %.0f y=%.0f", tag
-//                         , child.bounds.height, child.frame.height, child.bounds.origin.y))
-//            return
-//        }
-//        let contraints = child.constraints
-//        for contraint in contraints {
-//            print(tag,contraint.debugDescription)
-//        }
-//        print(String(format:"%@ super  %.0f  %0.f y=%.0f -- childView %.0f %.0f y=%.0f", tag
-//                     , parent.bounds.height, parent.frame.height, parent.bounds.origin.y
-//                     , child.bounds.height, child.frame.height, child.bounds.origin.y))
-//
+        Capturer.stopCapture(session:m_captureSession)
     }
     
     // setup constraint by panelBox.isHide
@@ -200,21 +204,17 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
         doAlexMLHandler(mlConfig: self.m_mlConfig, src: pixelBuffer, background: buf)
     }
     
-    var debugRunning: Bool = false
-    var debugCounter = 0
-    var debugTotal = 0
+    var m_isRunning: Bool = false
+    var debugCounter = 0, debugTotal = 0
     func doAlexMLHandler(mlConfig:MLModelConfiguration, src pixelBuffer:CVPixelBuffer, background bgBuffer:CVPixelBuffer) {
         self.debugTotal+=1
-        if self.debugRunning {
-            // print("Debug blocking dropframe \(self.debugCounter)");
-            self.debugCounter+=1
-            return
-        }
-        else  { self.debugRunning = true }
-        let timeMark = Date.now
+        if self.m_isRunning { self.debugCounter+=1; return }
+        else                { self.m_isRunning = true }
         
+        let timeMark = Date.now
         DispatchQueue.global(qos: .userInteractive).async  {
             // <A> resizeCropTo cost 10ms
+            defer {  self.m_isRunning = false }
             guard let copy = pixelBuffer.resizeCropTo(width: 1280, height: 720) else { return }
             guard let model = self.m_model else { return }
             // <B> model cost 46ms
@@ -238,7 +238,6 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
                 let duration =  timeMark.timeIntervalSinceNow
                 self.msgLabel.stringValue = String(format: "%.0f%% dropped    %.0fms", Float(self.debugCounter)/Float(self.debugTotal)*100,-duration*1000)
             }
-            self.debugRunning = false
         }
         
     }

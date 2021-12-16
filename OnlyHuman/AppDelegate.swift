@@ -36,13 +36,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidResignActive(_ notification: Notification) {
         // NSApplication.shared.mainWindow  always nil
         let list = NSApplication.shared.windows
-        if list.isEmpty { return }
+        if list.isEmpty { return}
         let win = list[0]
         win.styleMask.remove(.titled)
         // this application only 1 viewController
         guard let nSViewController = win.contentViewController else { return }
         let viewController = nSViewController as! ViewController
         viewController.panel(hide:true)
+    }
+    
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+        return true
     }
 
 }
