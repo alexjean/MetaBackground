@@ -90,9 +90,17 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
     
     @objc func dropdownMenuOpened() {
         let devices = Capturer.DiscoveryDevices()
-        if (devices.count == m_captureDevices.count) { return }
-        m_captureDevices = devices
-        buildDeviceSelector(devices: devices)
+        if (devices.count != m_captureDevices.count) {
+            m_captureDevices = devices
+            buildDeviceSelector(devices: devices)
+            return
+        }
+        for device in devices {
+            if m_captureDevices.contains(device) { continue }
+            m_captureDevices = devices
+            buildDeviceSelector(devices: devices)
+            return
+        }
     }
     
     override func viewDidLoad() {
