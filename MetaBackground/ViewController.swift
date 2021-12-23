@@ -40,6 +40,7 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
         let img0 = NSImage(size: NSSize(width: 1280, height: 720))
         var img1: NSImage? = nil
         switch(backgroundSelector.stringValue) {
+        case "Transparent": img1 = rollingBackground();                                            break
         case "LakeView":  img1 = NSImage(imageLiteralResourceName: "LakeView");                    break
         case "DimBar":    img1 = NSImage(imageLiteralResourceName: "DimBar");                      break
         case "Green":     img0.fillWith(color: NSColor(red: 0.6, green: 1, blue: 0.47, alpha: 1)); break
@@ -269,6 +270,32 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
         } else {  // User clicked on "Cancel"
             return nil
         }
+    }
+    
+    func rollingBackground() -> NSImage? {
+//        let windowID = Ut.shared.getWindowID(bundleID: "be.goodbrain.MetaBackground", winTitle: "MetaBackground")
+//        let windowID = Ut.shared.getWindowID(bundleID: "com.blizzard.worldofwarcraft", winTitle: "魔兽世界")
+
+        guard let win = view.window else { return nil }
+        let windowID = CGWindowID(win.windowNumber)
+        if windowID == CGWindowID.zero {
+            print("Window not found!")
+            return nil
+        }
+//        guard let img = Ut.shared.captureWindowFromScreen(winId:windowID, rect:RECT.zero) else { return nil }
+
+        var client = Ut.shared.getWindowRect(winId: windowID)
+        client.top += panelBox.bounds.height         // CGRect 左上是0， 扣掉Panel高
+        let cgRect  = client.toCGRect()
+//        var nsRect = win.frame
+//        nsRect.size.height -= panelBox.bounds.height
+//        let cgRect = NSRectToCGRect(nsRect)
+        guard let img = CGWindowListCreateImage(cgRect, [.optionOnScreenBelowWindow], windowID, [.bestResolution])
+        else { return nil }
+        let nsImage = NSImage(cgImage: img, size: CGSize(width:1280, height:720))
+        return nsImage
+//        backgroundBuffer = nsImage.pixelBuffer()?.resizeCropTo(width: 1280, height: 720)
+//        videoView.image = nsImage
     }
 
 }

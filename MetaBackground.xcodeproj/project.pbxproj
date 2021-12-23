@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FA39000E27744330001CD707 /* Ut.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA39000D27744330001CD707 /* Ut.swift */; };
 		FA69ECF927622A590073C027 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA69ECF827622A590073C027 /* AppDelegate.swift */; };
 		FA69ECFB27622A590073C027 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA69ECFA27622A590073C027 /* ViewController.swift */; };
 		FA69ECFD27622A5A0073C027 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA69ECFC27622A5A0073C027 /* Assets.xcassets */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FA39000D27744330001CD707 /* Ut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ut.swift; sourceTree = "<group>"; };
 		FA69ECF527622A590073C027 /* MetaBackground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MetaBackground.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA69ECF827622A590073C027 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FA69ECFA27622A590073C027 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -69,6 +71,7 @@
 				FA69ECFE27622A5A0073C027 /* Main.storyboard */,
 				FA69ED0127622A5A0073C027 /* MetaBackground.entitlements */,
 				FA69ED0927622D3C0073C027 /* NSImageExtension.swift */,
+				FA39000D27744330001CD707 /* Ut.swift */,
 			);
 			path = MetaBackground;
 			sourceTree = "<group>";
@@ -146,6 +149,7 @@
 				FA69ECFB27622A590073C027 /* ViewController.swift in Sources */,
 				FA69ED0C27622D980073C027 /* CVPixelBufferExtension.swift in Sources */,
 				FA69ED0E27622DE30073C027 /* alexmodel.mlmodel in Sources */,
+				FA39000E27744330001CD707 /* Ut.swift in Sources */,
 				FA8D955227625AE400B8194C /* Capturer.swift in Sources */,
 				FA69ED0A27622D3C0073C027 /* NSImageExtension.swift in Sources */,
 				FA69ECF927622A590073C027 /* AppDelegate.swift in Sources */,
