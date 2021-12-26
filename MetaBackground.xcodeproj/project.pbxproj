@@ -15,6 +15,7 @@
 		FA69ED0A27622D3C0073C027 /* NSImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA69ED0927622D3C0073C027 /* NSImageExtension.swift */; };
 		FA69ED0C27622D980073C027 /* CVPixelBufferExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA69ED0B27622D980073C027 /* CVPixelBufferExtension.swift */; };
 		FA69ED0E27622DE30073C027 /* alexmodel.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = FA69ED0D27622DE30073C027 /* alexmodel.mlmodel */; };
+		FA88984727783F5100C7F45F /* DataProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA88984627783F5100C7F45F /* DataProcess.swift */; };
 		FA8D955227625AE400B8194C /* Capturer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8D955127625AE400B8194C /* Capturer.swift */; };
 /* End PBXBuildFile section */
 
@@ -29,6 +30,7 @@
 		FA69ED0927622D3C0073C027 /* NSImageExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSImageExtension.swift; sourceTree = "<group>"; };
 		FA69ED0B27622D980073C027 /* CVPixelBufferExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CVPixelBufferExtension.swift; sourceTree = "<group>"; };
 		FA69ED0D27622DE30073C027 /* alexmodel.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = alexmodel.mlmodel; sourceTree = "<group>"; };
+		FA88984627783F5100C7F45F /* DataProcess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataProcess.swift; sourceTree = "<group>"; };
 		FA8D955127625AE400B8194C /* Capturer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Capturer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -62,6 +64,7 @@
 		FA69ECF727622A590073C027 /* MetaBackground */ = {
 			isa = PBXGroup;
 			children = (
+				FA88984627783F5100C7F45F /* DataProcess.swift */,
 				FA69ECF827622A590073C027 /* AppDelegate.swift */,
 				FA69ECFA27622A590073C027 /* ViewController.swift */,
 				FA8D955127625AE400B8194C /* Capturer.swift */,
@@ -148,6 +151,7 @@
 			files = (
 				FA69ECFB27622A590073C027 /* ViewController.swift in Sources */,
 				FA69ED0C27622D980073C027 /* CVPixelBufferExtension.swift in Sources */,
+				FA88984727783F5100C7F45F /* DataProcess.swift in Sources */,
 				FA69ED0E27622DE30073C027 /* alexmodel.mlmodel in Sources */,
 				FA39000E27744330001CD707 /* Ut.swift in Sources */,
 				FA8D955227625AE400B8194C /* Capturer.swift in Sources */,

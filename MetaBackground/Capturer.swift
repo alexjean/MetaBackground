@@ -7,7 +7,7 @@
 import Vision
 import AVKit
 
-class Capturer: NSObject {
+extension Capturer {
     static func DiscoveryDevices() -> [AVCaptureDevice] {
         let discoverySession = AVCaptureDevice.DiscoverySession(
             deviceTypes:[.builtInWideAngleCamera, .externalUnknown],
@@ -15,14 +15,32 @@ class Capturer: NSObject {
         return discoverySession.devices
     }
 
-    static func addInput(device:AVCaptureDevice, session:AVCaptureSession) {
+    func debug(msg:String, func1:String = #function) {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm:ss"
+        print(msg + "  on \(func1) " + formatter.string(from: Date.now))
+    }
+    
+    func message(msg:String) {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm:ss"
+        print(msg + "  " + formatter.string(from: Date.now))
+    }
+}
+
+class Capturer: NSObject {
+    var session: AVCaptureSession? = nil
+
+    func addInput(device:AVCaptureDevice) {
+        guard let session = session else { return }
         do {
             let input = try AVCaptureDeviceInput(device:device)
             session.addInput(input)
-        } catch {  print("Capture error:"+error.localizedDescription) }
+        } catch {  debug(msg:"Capture error:"+error.localizedDescription) }
     }
 
-    static func linkPreview(imageView:NSImageView?, session: AVCaptureSession) {
+    func linkPreview(imageView:NSImageView?) {
+        guard let session = session else { return }
         if let view0 = imageView {
             let previewLayer = AVCaptureVideoPreviewLayer(session: session)
             let conn = previewLayer.connection
@@ -37,65 +55,52 @@ class Capturer: NSObject {
         }
     }
     
-    static func prepareOutput(delegate:AVCaptureVideoDataOutputSampleBufferDelegate, session:AVCaptureSession) {
+    func setupSession(dataDelegate :AVCaptureVideoDataOutputSampleBufferDelegate) {
+        if session != nil { return }  // setup only once
+        session = AVCaptureSession()
+        guard let session = session else { return }
+        session.sessionPreset = .low
         let dataOutput = AVCaptureVideoDataOutput()
-        dataOutput.setSampleBufferDelegate(delegate, queue: DispatchQueue(label: "videoQueue"))
+        dataOutput.setSampleBufferDelegate(dataDelegate, queue: DispatchQueue(label: "videoQueue"))
         dataOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_32BGRA)]
         dataOutput.alwaysDiscardsLateVideoFrames = true
         if session.canAddOutput(dataOutput) {
             session.addOutput(dataOutput)
-        } else { print("The capture session cannot Add Format_32BGRA") }
-    }
-    
-    static func setupSession(dataDelegate :AVCaptureVideoDataOutputSampleBufferDelegate)-> AVCaptureSession? {
-        let session = AVCaptureSession()
-        session.sessionPreset = .low
-       
-        prepareOutput(delegate: dataDelegate, session: session)
+        } else { debug(msg:"The capture session cannot Add Format_32BGRA") }
         session.commitConfiguration()
-        return session
     }
     
-    static func removeInput(captureSession: AVCaptureSession) {
-        if captureSession.isRunning { captureSession.stopRunning() }
-        if let inputs = captureSession.inputs as? [AVCaptureDeviceInput] {
+    func removeInput() {
+        guard let session = session else { return }
+        if session.isRunning { session.stopRunning() }
+        if let inputs = session.inputs as? [AVCaptureDeviceInput] {
             for input in inputs {
-                captureSession.removeInput(input)
+                session.removeInput(input)
             }
         }
     }
     
-    static func startCapture(session :AVCaptureSession?, device captureDevice:AVCaptureDevice?) {
-        if let session = session {
-            if !session.isRunning  {
-                if session.inputs.isEmpty {
-                    guard let device = captureDevice else {
-                        printMessageTime(msg: "...No device to startCapture")
-                        return
-                    }
-                    Capturer.addInput(device: device, session: session)
+    func start(device captureDevice:AVCaptureDevice?) {
+        guard let session = session else { return }
+        if !session.isRunning  {
+            if session.inputs.isEmpty {
+                guard let device = captureDevice else {
+                    debug(msg: "...No device to startCapture")
+                    return
                 }
-                session.startRunning()
-                printMessageTime(msg: "...startCapture")
+                addInput(device: device)
             }
+            session.startRunning()
+            message(msg: "...startCapture")
         }
     }
     
-    static func stopCapture(session: AVCaptureSession?) {
-        if let session = session {
-            if session.isRunning  {
-                Capturer.removeInput(captureSession: session) // stopRunning in removeInput
-                printMessageTime(msg: "===stopCapture")
-            }
+    func stop() {
+        guard let session = session else { return }
+        if session.isRunning  {
+            removeInput() // stopRunning in removeInput
+            message(msg: "===stopCapture")
         }
     }
     
-    static func printMessageTime(msg:String) {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm:ss"
-        print(msg + " " + formatter.string(from: Date.now))
-    }
-
-
-
 }

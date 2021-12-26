@@ -711,7 +711,7 @@
                         <subviews>
                             <imageView autoresizesSubviews="NO" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="499" verticalCompressionResistancePriority="499" translatesAutoresizingMaskIntoConstraints="NO" id="NG6-e5-dcH">
                                 <rect key="frame" x="0.0" y="0.0" width="480" height="274"/>
-                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" id="DJU-C2-sCe"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageAlignment="bottomLeft" imageScaling="proportionallyUpOrDown" id="DJU-C2-sCe"/>
                             </imageView>
                             <box boxType="custom" cornerRadius="4" title="Box" id="K8n-uH-lbf">
                                 <rect key="frame" x="0.0" y="274" width="480" height="36"/>

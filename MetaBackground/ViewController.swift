@@ -6,11 +6,18 @@
 //
 
 import Cocoa
-import CoreML
 import AVKit
-import Vision
 
-class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
+extension ViewController: ImageMessageDelegate {
+    func setImageMessage(image: CGImage, message: String) {
+        DispatchQueue.main.async {
+            self.videoView.image = NSImage(cgImage: image, size: NSSize(width: image.width, height: image.height))
+            self.msgLabel.stringValue = message
+        }
+    }
+}
+
+class ViewController: NSViewController{
 
     @IBOutlet var msgLabel: NSTextField!
     @IBOutlet var videoView: NSImageView!
@@ -18,22 +25,15 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
     @IBOutlet var backgroundSelector: NSComboBox!
     @IBOutlet var panelBox: NSBox!
     
-    private var alexOutput: alexmodelOutput?
-    private var backgroundBuffer: CVPixelBuffer?
-    private var m_mlConfig:MLModelConfiguration
-    private var m_model:alexmodel?
-   
-    private var m_captureSession:AVCaptureSession?
-    private var m_captureDevice:AVCaptureDevice?
-    private var m_captureDevices:[AVCaptureDevice] = []
+    let m_dataProcess = DataProcess()
+    let m_capturer = Capturer()
     
-    private var loadCounter:Int = 0
+    var m_device:AVCaptureDevice?
+    var m_deviceList:[AVCaptureDevice] = []
+
     required init?(coder: NSCoder) {
-        m_mlConfig=MLModelConfiguration()
-        m_mlConfig.allowLowPrecisionAccumulationOnGPU = true
-        m_mlConfig.computeUnits = .cpuAndGPU
-        m_model = try? alexmodel(configuration: m_mlConfig)
         super.init(coder: coder)
+        m_dataProcess.myDelegate = self
     }
     
     @IBAction func onClickBackgroundSelector(_ sender: Any) {
@@ -50,13 +50,12 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
                           break
         default:          img0.fillWith(color: NSColor.white);                                     break
         }
-        self.alexOutput = nil
         guard let img = img1 else {
-            backgroundBuffer = img0.pixelBuffer()
+            m_dataProcess.setBackgroundBuffer(buffer: img0.pixelBuffer())
             videoView.image = img0
             return
         }
-        backgroundBuffer = img.pixelBuffer()?.resizeCropTo(width: 1280, height: 720)
+        m_dataProcess.setBackgroundBuffer(buffer: img.pixelBuffer()?.resizeCropTo(width: 1280, height: 720))
         videoView.image = img
     }
     
@@ -66,19 +65,20 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
         }
         let index = button.indexOfSelectedItem
         print("device \(index) \(button.itemTitle(at: index)) selected!")
-        let count = m_captureDevices.count
+        let count = m_deviceList.count
         if count <= index {
             print("Strange \(count) devices , we got index \(index) !")
             return
         }
-        let device = m_captureDevices[index]
+        let device = m_deviceList[index]
         if !device.isConnected { return }
-        m_captureDevice = device
-        Capturer.stopCapture(session: m_captureSession)
-        Capturer.startCapture(session: m_captureSession, device: device)
+        m_device = device
+        m_capturer.stop()
+        m_capturer.start(device: device)
     }
     
     private func buildDeviceSelector(devices:[AVCaptureDevice]) {
+        m_deviceList = devices
         deviceSelector.removeAllItems()
         if devices.isEmpty {
             deviceSelector.addItem(withTitle: "No video device!")
@@ -91,19 +91,18 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
     
     @objc func dropdownMenuOpened() {
         let devices = Capturer.DiscoveryDevices()
-        if (devices.count != m_captureDevices.count) {
-            m_captureDevices = devices
+        if (devices.count != m_deviceList.count) {
             buildDeviceSelector(devices: devices)
             return
         }
         for device in devices {
-            if m_captureDevices.contains(device) { continue }
-            m_captureDevices = devices
+            if m_deviceList.contains(device) { continue }
             buildDeviceSelector(devices: devices)
             return
         }
     }
     
+    private var loadCounter:Int = 0
     override func viewDidLoad() {
         super.viewDidLoad()
         backgroundSelector.stringValue = "LakeView"
@@ -115,37 +114,21 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
         
         let devices = Capturer.DiscoveryDevices()
         buildDeviceSelector(devices: devices)
-        m_captureDevice = devices.first
-        m_captureDevices = devices
-        if m_captureSession == nil {
-            m_captureSession = Capturer.setupSession(dataDelegate: self)
-        }
-        
+        m_device = devices.first
+        m_deviceList = devices
+        m_capturer.setupSession(dataDelegate: m_dataProcess)    // setup only once
         NotificationCenter.default.addObserver(self, selector: #selector(dropdownMenuOpened),
                                                name: NSPopUpButton.willPopUpNotification,
                                                object: nil)
-
     }
-    
-    override var representedObject: Any? {
-        didSet {
-        }
-    }
-    
-    func printMessageTime(msg:String) {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm:ss"
-        print(msg + " " + formatter.string(from: Date.now))
-    }
-    
-    
+       
     override func viewDidAppear() {
         view.window?.level = .floating
-        Capturer.startCapture(session:m_captureSession, device: m_captureDevice)
+        m_capturer.start( device: m_device)
     }
     
     override func viewWillDisappear() {
-        Capturer.stopCapture(session:m_captureSession)
+        m_capturer.stop()
     }
     
     // setup constraint by panelBox.isHide
@@ -178,6 +161,7 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
             return
         }
         panelBox.isHidden = hide
+        win.hasShadow = !hide
         setupVideoConstraints()
         let sizeWin:CGSize
         var width0 = win.frame.width, height0 = win.frame.height
@@ -196,59 +180,11 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
             win.setFrame(winFrame, display: true)
             return
         }
-        sizeWin = CGSize(width: width0, height: imgHeight + offset * 1)
+        sizeWin = CGSize(width: width0, height: imgHeight + offset)
         let winFrame = NSRect(origin: win.frame.origin, size: sizeWin)
         win.setFrame(winFrame, display: true)  // 當autoresizeMask on時，這條會改 minY
         //let constraint = NSAutoresizingMaskLayoutConstraint  // autoresizingMaskYAxisAnchor
         //view.setBoundsSize(sizeWin)    // Bounds一設，subview constraints全失效
-    }
-    
-    func captureOutput(_ output: AVCaptureOutput, didDrop sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        print("failed", Date())
-    }
-    
-    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        guard let pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
-        guard let buf = backgroundBuffer else { return }
-        doAlexMLHandler(mlConfig: self.m_mlConfig, src: pixelBuffer, background: buf)
-    }
-    
-    var m_isRunning: Bool = false
-    var debugCounter = 0, debugTotal = 0
-    func doAlexMLHandler(mlConfig:MLModelConfiguration, src pixelBuffer:CVPixelBuffer, background bgBuffer:CVPixelBuffer) {
-        self.debugTotal+=1
-        if self.m_isRunning { self.debugCounter+=1; return }
-        else                { self.m_isRunning = true }
-        
-        let timeMark = Date.now
-        DispatchQueue.global(qos: .userInteractive).async  {
-            // <A> resizeCropTo cost 10ms
-            defer {  self.m_isRunning = false }
-            guard let copy = pixelBuffer.resizeCropTo(width: 1280, height: 720) else { return }
-            guard let model = self.m_model else { return }
-            // <B> model cost 46ms
-            let out0 = self.alexOutput
-            let r1 = out0?.r1o, r2 = out0?.r2o
-            let r3 = out0?.r3o, r4 = out0?.r4o
-            let alexInput = alexmodelInput(src: copy, bgd: bgBuffer, r1i: r1, r2i: r2, r3i: r3, r4i: r4)
-            do {
-                let out1 = try model.prediction(input: alexInput)
-                self.alexOutput = out1
-            } catch { fatalError("model.prediction error!\r\n ==>"+error.localizedDescription) }  // Failed to src yuv2
-
-            guard let buf = self.alexOutput?.fgr else { return }
-            // <C> buf to CGImage two line cost 20ms
-            // <A>+<C> cost 26ms , <A>+<B>+<C> cost 65ms
-            let image = CIImage(cvPixelBuffer: buf, options: [:])
-            let cgImage = CIContext(options: nil).createCGImage(image, from: image.extent)!
-
-            DispatchQueue.main.async {
-                self.videoView.image = NSImage(cgImage: cgImage, size: NSSize(width: cgImage.width, height: cgImage.height))
-                let duration =  timeMark.timeIntervalSinceNow
-                self.msgLabel.stringValue = String(format: "%.0f%% dropped    %.0fms", Float(self.debugCounter)/Float(self.debugTotal)*100,-duration*1000)
-            }
-        }
-        
     }
     
     func chooseImageFile() -> NSImage? {
@@ -275,7 +211,8 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
     func rollingBackground() -> NSImage? {
 //        let windowID = Ut.shared.getWindowID(bundleID: "be.goodbrain.MetaBackground", winTitle: "MetaBackground")
 //        let windowID = Ut.shared.getWindowID(bundleID: "com.blizzard.worldofwarcraft", winTitle: "魔兽世界")
-
+//        panel(hide: true)
+        
         guard let win = view.window else { return nil }
         let windowID = CGWindowID(win.windowNumber)
         if windowID == CGWindowID.zero {
@@ -285,6 +222,7 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
 //        guard let img = Ut.shared.captureWindowFromScreen(winId:windowID, rect:RECT.zero) else { return nil }
 
         var client = Ut.shared.getWindowRect(winId: windowID)
+        //client.left -= 1
         client.top += panelBox.bounds.height         // CGRect 左上是0， 扣掉Panel高
         let cgRect  = client.toCGRect()
 //        var nsRect = win.frame
@@ -297,6 +235,14 @@ class ViewController: NSViewController, AVCaptureVideoDataOutputSampleBufferDele
 //        backgroundBuffer = nsImage.pixelBuffer()?.resizeCropTo(width: 1280, height: 720)
 //        videoView.image = nsImage
     }
+    
+}
 
+extension ViewController {
+    func printMessageTime(msg:String) {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm:ss"
+        print(msg + " " + formatter.string(from: Date.now))
+    }
 }
 
