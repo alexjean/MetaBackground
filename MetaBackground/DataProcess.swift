@@ -16,7 +16,7 @@ protocol ImageMessageDelegate {
 
 class DataProcess: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
 
-    var myDelegate: ImageMessageDelegate?
+    var showDelegate: ImageMessageDelegate?
     
     private let mlConfig:MLModelConfiguration
     private let model:alexmodel?
@@ -76,7 +76,7 @@ class DataProcess: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
             let cgImage = CIContext(options: nil).createCGImage(image, from: image.extent)!
             let message = String(format: "%.0f%% dropped    %.0fms", Float(self.debugCounter)/Float(self.debugTotal)*100,
                                  -timeMark.timeIntervalSinceNow*1000)
-            self.myDelegate?.setImageMessage(image: cgImage, message: message)
+            self.showDelegate?.setImageMessage(image: cgImage, message: message)
         }
     }
 }

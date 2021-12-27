@@ -1,6 +1,6 @@
 //
 //  ViewController.swift
-//  OnlyHuman
+//  MetaBackground
 //
 //  Created by Alex on 2021/12/9.
 //
@@ -33,14 +33,14 @@ class ViewController: NSViewController{
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        m_dataProcess.myDelegate = self
+        m_dataProcess.showDelegate = self
     }
     
     @IBAction func onClickBackgroundSelector(_ sender: Any) {
         let img0 = NSImage(size: NSSize(width: 1280, height: 720))
         var img1: NSImage? = nil
         switch(backgroundSelector.stringValue) {
-        case "Transparent": img1 = rollingBackground();                                            break
+        case "Transparent": rollingBackground();                                                   return
         case "LakeView":  img1 = NSImage(imageLiteralResourceName: "LakeView");                    break
         case "DimBar":    img1 = NSImage(imageLiteralResourceName: "DimBar");                      break
         case "Green":     img0.fillWith(color: NSColor(red: 0.6, green: 1, blue: 0.47, alpha: 1)); break
@@ -96,9 +96,10 @@ class ViewController: NSViewController{
             return
         }
         for device in devices {
-            if m_deviceList.contains(device) { continue }
-            buildDeviceSelector(devices: devices)
-            return
+            if !m_deviceList.contains(device) {
+                buildDeviceSelector(devices: devices)
+                return
+            }
         }
     }
     
@@ -110,12 +111,12 @@ class ViewController: NSViewController{
         setupVideoConstraints()
         videoView.translatesAutoresizingMaskIntoConstraints = false
         loadCounter+=1;
-        printMessageTime(msg: "---viewDidLoad \(loadCounter) times")
+        debug(msg: "---viewDidLoad \(loadCounter) times")
         
         let devices = Capturer.DiscoveryDevices()
         buildDeviceSelector(devices: devices)
         m_device = devices.first
-        m_deviceList = devices
+
         m_capturer.setupSession(dataDelegate: m_dataProcess)    // setup only once
         NotificationCenter.default.addObserver(self, selector: #selector(dropdownMenuOpened),
                                                name: NSPopUpButton.willPopUpNotification,
@@ -130,7 +131,7 @@ class ViewController: NSViewController{
     override func viewWillDisappear() {
         m_capturer.stop()
     }
-    
+       
     // setup constraint by panelBox.isHide
     // the topAnchor's priority of VideoView in storybord is set to 900
     private var constraintToPanelBoxBottom: NSLayoutConstraint?
@@ -151,13 +152,12 @@ class ViewController: NSViewController{
             constraintToViewTop?.isActive = false
             constraintToPanelBoxBottom?.isActive = true
         }
-        
     }
     
     public func panel(hide:Bool) {
         if panelBox.isHidden == hide { return }
         guard let win = view.window else {
-            printMessageTime(msg: "Odd thing, no view.window")
+            debug(msg: "Odd thing, no view.window")
             return
         }
         panelBox.isHidden = hide
@@ -170,18 +170,20 @@ class ViewController: NSViewController{
         if (hide) {
             let width1 = imgHeight * 16 / 9
             let height1 = width0 * 9 / 16
-            if width0 > (width1 + 0.001) {
-                width0 = width1
-            } else if imgHeight > (height1 + 0.001) {
-                imgHeight = height1
+            if width0 > (width1 + 0.0001) {
+                width0 = round(width1)    // 不round(), setFrame會自動進位,誤差更大
+            } else if imgHeight > (height1 + 0.0001) {
+                imgHeight = round(height1)
             }
             sizeWin = CGSize(width: width0, height: imgHeight)
             let winFrame = NSRect(origin: win.frame.origin, size: sizeWin)
+            debug(msg:"w\(winFrame.width)  h\(winFrame.height) x\(winFrame.origin.x) y\(winFrame.origin.y)")
             win.setFrame(winFrame, display: true)
             return
         }
         sizeWin = CGSize(width: width0, height: imgHeight + offset)
         let winFrame = NSRect(origin: win.frame.origin, size: sizeWin)
+        debug(msg:"w\(winFrame.width)  h\(winFrame.height) x\(winFrame.origin.x) y\(winFrame.origin.y)")
         win.setFrame(winFrame, display: true)  // 當autoresizeMask on時，這條會改 minY
         //let constraint = NSAutoresizingMaskLayoutConstraint  // autoresizingMaskYAxisAnchor
         //view.setBoundsSize(sizeWin)    // Bounds一設，subview constraints全失效
@@ -199,7 +201,7 @@ class ViewController: NSViewController{
 
         if (dialog.runModal() == NSApplication.ModalResponse.OK) {
             guard let url = dialog.url else { return nil }
-            printMessageTime(msg: String(format: "Selected url: %@", url.debugDescription))
+            debug(msg: String(format: "Selected url: %@", url.debugDescription))
             let img = NSImage(contentsOf: url)
             if (img == nil) { print("Something wrong!") }
             return img
@@ -208,38 +210,44 @@ class ViewController: NSViewController{
         }
     }
     
-    func rollingBackground() -> NSImage? {
-//        let windowID = Ut.shared.getWindowID(bundleID: "be.goodbrain.MetaBackground", winTitle: "MetaBackground")
+    func rollingBackground() {
 //        let windowID = Ut.shared.getWindowID(bundleID: "com.blizzard.worldofwarcraft", winTitle: "魔兽世界")
 //        panel(hide: true)
-        
-        guard let win = view.window else { return nil }
+        guard let win = view.window else { return  }
         let windowID = CGWindowID(win.windowNumber)
         if windowID == CGWindowID.zero {
             print("Window not found!")
-            return nil
+            return
         }
 //        guard let img = Ut.shared.captureWindowFromScreen(winId:windowID, rect:RECT.zero) else { return nil }
-
-        var client = Ut.shared.getWindowRect(winId: windowID)
-        //client.left -= 1
-        client.top += panelBox.bounds.height         // CGRect 左上是0， 扣掉Panel高
-        let cgRect  = client.toCGRect()
-//        var nsRect = win.frame
-//        nsRect.size.height -= panelBox.bounds.height
-//        let cgRect = NSRectToCGRect(nsRect)
-        guard let img = CGWindowListCreateImage(cgRect, [.optionOnScreenBelowWindow], windowID, [.bestResolution])
-        else { return nil }
-        let nsImage = NSImage(cgImage: img, size: CGSize(width:1280, height:720))
-        return nsImage
-//        backgroundBuffer = nsImage.pixelBuffer()?.resizeCropTo(width: 1280, height: 720)
-//        videoView.image = nsImage
+//        var client = Ut.shared.getWindowRect(winId: windowID)
+//        client.top += panelBox.bounds.height         // CGRect 左上是0， 扣掉Panel高
+        let isHidden = panelBox.isHidden
+        panel(hide: true)
+        win.styleMask.remove(.titled)
+        updateViewConstraints()
+        // wait a while let window to fit the constraints
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(200)) {
+            let client = Ut.shared.getWindowRect(winId: windowID, removeTitle: false)
+            let cgRect  = client.toCGRect()
+            guard let img = CGWindowListCreateImage(cgRect, [.optionOnScreenBelowWindow], windowID, [.bestResolution])
+            else { return }
+            self.debug(msg:"w\(client.width)  h\(client.height) x\(client.left) y\(client.top)")
+            let nsImage = NSImage(cgImage: img, size: CGSize(width:1280, height:720))
+            self.m_dataProcess.setBackgroundBuffer(buffer: nsImage.pixelBuffer())
+            self.videoView.image = nsImage
+            if (!isHidden) {
+                self.panel(hide:false)
+                win.styleMask.update(with: .titled)
+            }
+        }
+        
     }
     
 }
 
 extension ViewController {
-    func printMessageTime(msg:String) {
+    func debug(msg:String) {
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm:ss"
         print(msg + " " + formatter.string(from: Date.now))

@@ -100,7 +100,7 @@ class Ut {
         return windowID
     }
     
-    public func getWindowRect(winId:UInt32) -> RECT
+    public func getWindowRect(winId:UInt32, removeTitle:Bool = true) -> RECT
     {   // 這裹的左上是(0,0)  x y己經都除BackingScaleFactor, 含了TitleBar
         guard let infoList = CGWindowListCopyWindowInfo([.optionIncludingWindow,.excludeDesktopElements], winId) else {
             return RECT.zero
@@ -113,7 +113,8 @@ class Ut {
         guard let height = bounds["Height"] as? CGFloat else { return RECT.zero }
         guard let x      = bounds["X"] as? CGFloat else { return RECT.zero }
         guard let y      = bounds["Y"] as? CGFloat else { return RECT.zero }
-        return RECT(x,y + 28, width, height - 28)  //猜的Title高28
+        if removeTitle {  return RECT(x,y + 28, width, height - 28)  } //猜的Title高28 
+        return RECT(x, y, width, height)
     }
     
     // Mac 此處rect呼叫前要先除BackingScaleFactor
