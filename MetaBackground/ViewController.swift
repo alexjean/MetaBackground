@@ -36,6 +36,8 @@ class ViewController: NSViewController{
         m_dataProcess.showDelegate = self
     }
     
+    
+    private weak var m_captureBackTimer: Timer? = nil
     @IBAction func onClickBackgroundSelector(_ sender: Any) {
         let img0 = NSImage(size: NSSize(width: 1280, height: 720))
         var img1: NSImage? = nil
@@ -49,6 +51,10 @@ class ViewController: NSViewController{
                           if img1 == nil { return }
                           break
         default:          img0.fillWith(color: NSColor.white);                                     break
+        }
+        if m_captureBackTimer != nil {
+            m_captureBackTimer?.invalidate()
+            m_captureBackTimer = nil
         }
         guard let img = img1 else {
             m_dataProcess.setBackgroundBuffer(buffer: img0.pixelBuffer())
@@ -107,7 +113,7 @@ class ViewController: NSViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         backgroundSelector.stringValue = "LakeView"
-        onClickBackgroundSelector([])
+        onClickBackgroundSelector("viewDidLoad")   // add message for breakpoint
         setupVideoConstraints()
         videoView.translatesAutoresizingMaskIntoConstraints = false
         loadCounter+=1;
@@ -163,6 +169,7 @@ class ViewController: NSViewController{
         panelBox.isHidden = hide
         win.hasShadow = !hide
         setupVideoConstraints()
+        // let auto-constraints do, the left-Top is origin, I set left-bottom the origin
         let sizeWin:CGSize
         var width0 = win.frame.width, height0 = win.frame.height
         let offset = panelBox.frame.height
@@ -177,14 +184,15 @@ class ViewController: NSViewController{
             }
             sizeWin = CGSize(width: width0, height: imgHeight)
             let winFrame = NSRect(origin: win.frame.origin, size: sizeWin)
-            debug(msg:"w\(winFrame.width)  h\(winFrame.height) x\(winFrame.origin.x) y\(winFrame.origin.y)")
+            //debug(msg:"w\(winFrame.width)  h\(winFrame.height) x\(winFrame.origin.x) y\(winFrame.origin.y)")
             win.setFrame(winFrame, display: true)
             return
         }
         sizeWin = CGSize(width: width0, height: imgHeight + offset)
         let winFrame = NSRect(origin: win.frame.origin, size: sizeWin)
-        debug(msg:"w\(winFrame.width)  h\(winFrame.height) x\(winFrame.origin.x) y\(winFrame.origin.y)")
+        //debug(msg:"w\(winFrame.width)  h\(winFrame.height) x\(winFrame.origin.x) y\(winFrame.origin.y)")
         win.setFrame(winFrame, display: true)  // 當autoresizeMask on時，這條會改 minY
+ 
         //let constraint = NSAutoresizingMaskLayoutConstraint  // autoresizingMaskYAxisAnchor
         //view.setBoundsSize(sizeWin)    // Bounds一設，subview constraints全失效
     }
@@ -213,35 +221,33 @@ class ViewController: NSViewController{
     func rollingBackground() {
 //        let windowID = Ut.shared.getWindowID(bundleID: "com.blizzard.worldofwarcraft", winTitle: "魔兽世界")
 //        panel(hide: true)
-        guard let win = view.window else { return  }
-        let windowID = CGWindowID(win.windowNumber)
-        if windowID == CGWindowID.zero {
-            print("Window not found!")
-            return
-        }
 //        guard let img = Ut.shared.captureWindowFromScreen(winId:windowID, rect:RECT.zero) else { return nil }
 //        var client = Ut.shared.getWindowRect(winId: windowID)
 //        client.top += panelBox.bounds.height         // CGRect 左上是0， 扣掉Panel高
-        let isHidden = panelBox.isHidden
-        panel(hide: true)
-        win.styleMask.remove(.titled)
-        updateViewConstraints()
-        // wait a while let window to fit the constraints
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(200)) {
-            let client = Ut.shared.getWindowRect(winId: windowID, removeTitle: false)
-            let cgRect  = client.toCGRect()
-            guard let img = CGWindowListCreateImage(cgRect, [.optionOnScreenBelowWindow], windowID, [.bestResolution])
-            else { return }
-            self.debug(msg:"w\(client.width)  h\(client.height) x\(client.left) y\(client.top)")
-            let nsImage = NSImage(cgImage: img, size: CGSize(width:1280, height:720))
-            self.m_dataProcess.setBackgroundBuffer(buffer: nsImage.pixelBuffer())
-            self.videoView.image = nsImage
-            if (!isHidden) {
-                self.panel(hide:false)
-                win.styleMask.update(with: .titled)
-            }
+        m_captureBackTimer?.invalidate()
+        m_captureBackTimer = nil
+        self.m_captureBackTimer = Timer.scheduledTimer(timeInterval: 0.005,
+                                                      target: self, selector: #selector(captureBack),
+                                                       userInfo: nil, repeats: true)
+    }
+    
+    @objc func captureBack() {
+        guard let win = self.view.window else { return }
+        let windowID = CGWindowID(win.windowNumber)
+        if windowID == CGWindowID.zero {
+            print("Window not found in \(#function)!")
+            return
         }
-        
+        let winOrigin = win.frame.origin
+        var h0 = view.bounds.height, y0 = winOrigin.y
+        let w0 = view.bounds.width , x0 = winOrigin.x
+        if (!panelBox.isHidden) { h0 -= panelBox.bounds.height }
+        let screenHeight = NSScreen.main?.frame.height ?? 1080
+        let cgRect = CGRect(x:x0, y:screenHeight - y0 - h0, width: w0, height: h0)
+        guard let img = CGWindowListCreateImage(cgRect, [.optionOnScreenBelowWindow], windowID, [.bestResolution])
+        else { return }
+        let nsImage = NSImage(cgImage: img, size: CGSize(width:1280, height:720))
+        self.m_dataProcess.setBackgroundBuffer(buffer: nsImage.pixelBuffer())
     }
     
 }

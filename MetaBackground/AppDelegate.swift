@@ -25,7 +25,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidBecomeActive(_ notification: Notification) {
         let list = NSApplication.shared.windows
         if list.isEmpty { return }
-        let win = list[0]
+        let win = list[0]   // MetaBackground只有一個Window
         win.styleMask.update(with: .titled)
         // this application only 1 viewController
         guard let nSViewController = win.contentViewController else { return }
