@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "AlexSketch16.png",
+      "filename" : "AlexSketch16 copy.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "16x16"
@@ -31,13 +31,13 @@
       "size" : "128x128"
     },
     {
-      "filename" : "AlexSketch2 56-1.png",
+      "filename" : "AlexSketch256-1.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "128x128"
     },
     {
-      "filename" : "AlexSketch2 56.png",
+      "filename" : "AlexSketch256.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "256x256"
@@ -55,7 +55,7 @@
       "size" : "512x512"
     },
     {
-      "filename" : "AlexSketch.png",
+      "filename" : "AlexSketch1024.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "512x512"

@@ -37,7 +37,7 @@ class ViewController: NSViewController{
     }
     
     
-    private weak var m_captureBackTimer: Timer? = nil
+    private var m_captureBackTimer: Timer? = nil
     @IBAction func onClickBackgroundSelector(_ sender: Any) {
         let img0 = NSImage(size: NSSize(width: 1280, height: 720))
         var img1: NSImage? = nil
@@ -112,6 +112,7 @@ class ViewController: NSViewController{
     private var loadCounter:Int = 0
     override func viewDidLoad() {
         super.viewDidLoad()
+//        view.window?.backgroundColor = NSColor(calibratedRed: 1, green: 0, blue: 0, alpha: 1) // cannot see any effect
         backgroundSelector.stringValue = "LakeView"
         onClickBackgroundSelector("viewDidLoad")   // add message for breakpoint
         setupVideoConstraints()
