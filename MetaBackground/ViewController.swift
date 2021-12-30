@@ -42,16 +42,26 @@ class ViewController: NSViewController{
         let img0 = NSImage(size: NSSize(width: 1280, height: 720))
         var img1: NSImage? = nil
         switch(backgroundSelector.stringValue) {
-        case "Transparent": rollingBackground();                                                   return
-        case "LakeView":  img1 = NSImage(imageLiteralResourceName: "LakeView");                    break
-        case "DimBar":    img1 = NSImage(imageLiteralResourceName: "DimBar");                      break
-        case "Green":     img0.fillWith(color: NSColor(red: 0.6, green: 1, blue: 0.47, alpha: 1)); break
-        case "Black":     img0.fillWith(color: NSColor.black);                                     break
+        case "Transparent": m_dataProcess.setBlockData(false)
+                            rollingBackground();
+                            return
+        case "LakeView": img1 = NSImage(imageLiteralResourceName: "LakeView");                    break
+        case "DimBar":  img1 = NSImage(imageLiteralResourceName: "DimBar");                      break
+        case "Origin":  m_dataProcess.setBlockData(true)
+                        // wait a while prevent background thread to set videoView.image
+                        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
+                            self.videoView.image = nil; self.msgLabel.stringValue = ""
+                            self.m_capturer.linkPreview(imageView: self.videoView)
+                        }
+                        return
+        case "Green":   img0.fillWith(color: NSColor(red: 0.6, green: 1, blue: 0.47, alpha: 1)); break
+        case "Black":   img0.fillWith(color: NSColor.black);                                     break
         case "YouSelect": img1 = chooseImageFile();
-                          if img1 == nil { return }
-                          break
-        default:          img0.fillWith(color: NSColor.white);                                     break
+                        if img1 == nil { return }
+                        break
+        default:        img0.fillWith(color: NSColor.white);                                     break
         }
+        m_dataProcess.setBlockData(false)
         if m_captureBackTimer != nil {
             m_captureBackTimer?.invalidate()
             m_captureBackTimer = nil
@@ -113,8 +123,6 @@ class ViewController: NSViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
 //        view.window?.backgroundColor = NSColor(calibratedRed: 1, green: 0, blue: 0, alpha: 1) // cannot see any effect
-        backgroundSelector.stringValue = "LakeView"
-        onClickBackgroundSelector("viewDidLoad")   // add message for breakpoint
         setupVideoConstraints()
         videoView.translatesAutoresizingMaskIntoConstraints = false
         loadCounter+=1;
@@ -125,6 +133,8 @@ class ViewController: NSViewController{
         m_device = devices.first
 
         m_capturer.setupSession(dataDelegate: m_dataProcess)    // setup only once
+        backgroundSelector.stringValue = "LakeView"
+        onClickBackgroundSelector("viewDidLoad")   // add message for breakpoint
         NotificationCenter.default.addObserver(self, selector: #selector(dropdownMenuOpened),
                                                name: NSPopUpButton.willPopUpNotification,
                                                object: nil)
@@ -138,7 +148,8 @@ class ViewController: NSViewController{
     override func viewWillDisappear() {
         m_capturer.stop()
     }
-       
+    
+      
     // setup constraint by panelBox.isHide
     // the topAnchor's priority of VideoView in storybord is set to 900
     private var constraintToPanelBoxBottom: NSLayoutConstraint?
@@ -227,7 +238,7 @@ class ViewController: NSViewController{
 //        client.top += panelBox.bounds.height         // CGRect 左上是0， 扣掉Panel高
         m_captureBackTimer?.invalidate()
         m_captureBackTimer = nil
-        self.m_captureBackTimer = Timer.scheduledTimer(timeInterval: 0.005,
+        self.m_captureBackTimer = Timer.scheduledTimer(timeInterval: 0.05,
                                                       target: self, selector: #selector(captureBack),
                                                        userInfo: nil, repeats: true)
     }

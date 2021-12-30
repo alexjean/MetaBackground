@@ -23,6 +23,7 @@ class DataProcess: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
 
     private var alexOutput: alexmodelOutput?
     private var isRunning: Bool = false
+    private var blockData: Bool = false
     private var debugCounter = 0, debugTotal = 0
     private var backgroundBuffer:CVPixelBuffer?
     
@@ -38,11 +39,21 @@ class DataProcess: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
         backgroundBuffer = buffer
     }
     
+    func setBlockData(_ block:Bool) {
+        blockData = block
+    }
+    
+    func isBlocking() -> Bool {
+        return blockData
+    }
+    
+    
     func captureOutput(_ output: AVCaptureOutput, didDrop sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         print("failed", Date())
     }
     
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        if (blockData) { return }
         guard let pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
         guard let buf = backgroundBuffer else { return }
         doAlexMLHandler(mlConfig: mlConfig, src: pixelBuffer, background: buf)

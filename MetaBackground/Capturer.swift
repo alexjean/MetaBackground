@@ -30,6 +30,7 @@ extension Capturer {
 
 class Capturer: NSObject {
     var session: AVCaptureSession? = nil
+    var previewLayer:AVCaptureVideoPreviewLayer? = nil
 
     func addInput(device:AVCaptureDevice) {
         guard let session = session else { return }
@@ -42,16 +43,21 @@ class Capturer: NSObject {
     func linkPreview(imageView:NSImageView?) {
         guard let session = session else { return }
         if let view0 = imageView {
-            let previewLayer = AVCaptureVideoPreviewLayer(session: session)
-            let conn = previewLayer.connection
+            if previewLayer == nil {
+                previewLayer = AVCaptureVideoPreviewLayer(session: session)
+            }
+            guard let layer0 = previewLayer else { return }
+            let conn = layer0.connection
             if conn?.isVideoMirroringSupported == true {
 //                    conn.automaticallyAdjustsVideoMirroring = false
 //                    conn.isVideoMirrored = true
-              }
-            view0.wantsLayer = false   // wantsLayer = false to let preview not show
-            view0.layer?.addSublayer(previewLayer)
+            }
+            view0.wantsLayer = true   // when wantsLayer = true , will create a backLayer
+//            view0.layer?.sublayers?.removeAll()  // 因為不知何時 BackingLayer會加到Sublayer卡在前面
+//            view0.layer?.addSublayer(layer0)
+            view0.layer?.insertSublayer(layer0, at: 0)
             let frame1 = view0.frame
-            previewLayer.frame = NSRect(x:0, y:0, width: frame1.width, height:frame1.height)
+            layer0.frame = NSRect(x:0, y:0, width: frame1.width, height:frame1.height)
         }
     }
     
@@ -98,6 +104,7 @@ class Capturer: NSObject {
     func stop() {
         guard let session = session else { return }
         if session.isRunning  {
+            session.stopRunning()
             removeInput() // stopRunning in removeInput
             message(msg: "===stopCapture")
         }
