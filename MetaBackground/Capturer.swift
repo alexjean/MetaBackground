@@ -53,12 +53,16 @@ class Capturer: NSObject {
 //                    conn.isVideoMirrored = true
             }
             view0.wantsLayer = true   // when wantsLayer = true , will create a backLayer
-//            view0.layer?.sublayers?.removeAll()  // 因為不知何時 BackingLayer會加到Sublayer卡在前面
-//            view0.layer?.addSublayer(layer0)
-            view0.layer?.insertSublayer(layer0, at: 0)
+            view0.layer?.insertSublayer(layer0, at: 0)  // 因為不知何時 BackingLayer會加到Sublayer卡在前面, 所以用insert
             let frame1 = view0.frame
             layer0.frame = NSRect(x:0, y:0, width: frame1.width, height:frame1.height)
         }
+    }
+    
+    func unlinkPreview() {
+        guard let layer0 = previewLayer else { return }
+        layer0.removeFromSuperlayer()
+        previewLayer = nil
     }
     
     func setupSession(dataDelegate :AVCaptureVideoDataOutputSampleBufferDelegate) {

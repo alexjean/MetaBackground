@@ -18,7 +18,49 @@
 		FA69ED0E27622DE30073C027 /* alexmodel.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = FA69ED0D27622DE30073C027 /* alexmodel.mlmodel */; };
 		FA88984727783F5100C7F45F /* DataProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA88984627783F5100C7F45F /* DataProcess.swift */; };
 		FA8D955227625AE400B8194C /* Capturer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8D955127625AE400B8194C /* Capturer.swift */; };
+		FAEA118C27859246003F6248 /* SV_PlugIn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FAEA118927859246003F6248 /* SV_PlugIn.cpp */; };
+		FAEA119A2785962E003F6248 /* SV_Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FAEA11992785962E003F6248 /* SV_Object.cpp */; };
+		FAEA119F2785B8D5003F6248 /* CAMutex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FAEA119E2785B8D5003F6248 /* CAMutex.cpp */; };
+		FAEA11BA2785B902003F6248 /* CADebugMacros.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FAEA11A42785B902003F6248 /* CADebugMacros.cpp */; };
+		FAEA11BB2785B902003F6248 /* CAVolumeCurve.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FAEA11A72785B902003F6248 /* CAVolumeCurve.cpp */; };
+		FAEA11BC2785B902003F6248 /* CADebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FAEA11A82785B902003F6248 /* CADebugger.cpp */; };
+		FAEA11BD2785B902003F6248 /* CACFDictionary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FAEA11AA2785B902003F6248 /* CACFDictionary.cpp */; };
+		FAEA11BE2785B902003F6248 /* CADebugPrintf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FAEA11AB2785B902003F6248 /* CADebugPrintf.cpp */; };
+		FAEA11BF2785B902003F6248 /* CAHostTimeBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FAEA11AD2785B902003F6248 /* CAHostTimeBase.cpp */; };
+		FAEA11C02785B902003F6248 /* CADispatchQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FAEA11AF2785B902003F6248 /* CADispatchQueue.cpp */; };
+		FAEA11C12785B902003F6248 /* CACFNumber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FAEA11B02785B902003F6248 /* CACFNumber.cpp */; };
+		FAEA11C22785B902003F6248 /* CAGuard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FAEA11B32785B902003F6248 /* CAGuard.cpp */; };
+		FAEA11C32785B902003F6248 /* CACFArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FAEA11B52785B902003F6248 /* CACFArray.cpp */; };
+		FAEA11C52785B902003F6248 /* CACFString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FAEA11B92785B902003F6248 /* CACFString.cpp */; };
+		FAEA11D22785BD3D003F6248 /* SV_Device.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FAEA11CE2785BD3D003F6248 /* SV_Device.cpp */; };
+		FAEA11D32785BD3D003F6248 /* SV_IOKit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FAEA11CF2785BD3D003F6248 /* SV_IOKit.cpp */; };
+		FAEA11D42785C24A003F6248 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAEA119327859452003F6248 /* CoreFoundation.framework */; };
+		FAEA11D52785C24E003F6248 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAEA119427859452003F6248 /* IOKit.framework */; };
+		FAEA11D62785C253003F6248 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAEA119127859452003F6248 /* CoreAudio.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		FA74B005278302E60084F256 /* Embed System Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(SYSTEM_EXTENSIONS_FOLDER_PATH)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			name = "Embed System Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FAEA114F27853114003F6248 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		FA0E2A03277DC4D500D2DC92 /* AlexWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlexWindowController.swift; sourceTree = "<group>"; };
@@ -34,6 +76,48 @@
 		FA69ED0D27622DE30073C027 /* alexmodel.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = alexmodel.mlmodel; sourceTree = "<group>"; };
 		FA88984627783F5100C7F45F /* DataProcess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataProcess.swift; sourceTree = "<group>"; };
 		FA8D955127625AE400B8194C /* Capturer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Capturer.swift; sourceTree = "<group>"; };
+		FAEA117927859071003F6248 /* SnycVoice.driver */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SnycVoice.driver; sourceTree = BUILT_PRODUCTS_DIR; };
+		FAEA118627859246003F6248 /* SV_PlugIn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SV_PlugIn.h; sourceTree = "<group>"; };
+		FAEA118827859246003F6248 /* SV_PlugIn-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SV_PlugIn-Info.plist"; sourceTree = "<group>"; };
+		FAEA118927859246003F6248 /* SV_PlugIn.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SV_PlugIn.cpp; sourceTree = "<group>"; };
+		FAEA119027859452003F6248 /* Kernel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kernel.framework; path = System/Library/Frameworks/Kernel.framework; sourceTree = SDKROOT; };
+		FAEA119127859452003F6248 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		FAEA119227859452003F6248 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		FAEA119327859452003F6248 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		FAEA119427859452003F6248 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		FAEA11982785962E003F6248 /* SV_Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SV_Object.h; sourceTree = "<group>"; };
+		FAEA11992785962E003F6248 /* SV_Object.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SV_Object.cpp; sourceTree = "<group>"; };
+		FAEA119D2785B8D5003F6248 /* CAMutex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAMutex.h; sourceTree = "<group>"; };
+		FAEA119E2785B8D5003F6248 /* CAMutex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CAMutex.cpp; sourceTree = "<group>"; };
+		FAEA11A02785B901003F6248 /* CADebugMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CADebugMacros.h; sourceTree = "<group>"; };
+		FAEA11A12785B901003F6248 /* CACFDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CACFDictionary.h; sourceTree = "<group>"; };
+		FAEA11A22785B902003F6248 /* CACFString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CACFString.h; sourceTree = "<group>"; };
+		FAEA11A32785B902003F6248 /* CAException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAException.h; sourceTree = "<group>"; };
+		FAEA11A42785B902003F6248 /* CADebugMacros.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CADebugMacros.cpp; sourceTree = "<group>"; };
+		FAEA11A62785B902003F6248 /* CADebugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CADebugger.h; sourceTree = "<group>"; };
+		FAEA11A72785B902003F6248 /* CAVolumeCurve.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CAVolumeCurve.cpp; sourceTree = "<group>"; };
+		FAEA11A82785B902003F6248 /* CADebugger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CADebugger.cpp; sourceTree = "<group>"; };
+		FAEA11A92785B902003F6248 /* CACFNumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CACFNumber.h; sourceTree = "<group>"; };
+		FAEA11AA2785B902003F6248 /* CACFDictionary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CACFDictionary.cpp; sourceTree = "<group>"; };
+		FAEA11AB2785B902003F6248 /* CADebugPrintf.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CADebugPrintf.cpp; sourceTree = "<group>"; };
+		FAEA11AC2785B902003F6248 /* CAGuard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAGuard.h; sourceTree = "<group>"; };
+		FAEA11AD2785B902003F6248 /* CAHostTimeBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CAHostTimeBase.cpp; sourceTree = "<group>"; };
+		FAEA11AE2785B902003F6248 /* CACFArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CACFArray.h; sourceTree = "<group>"; };
+		FAEA11AF2785B902003F6248 /* CADispatchQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CADispatchQueue.cpp; sourceTree = "<group>"; };
+		FAEA11B02785B902003F6248 /* CACFNumber.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CACFNumber.cpp; sourceTree = "<group>"; };
+		FAEA11B12785B902003F6248 /* CACFObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CACFObject.h; sourceTree = "<group>"; };
+		FAEA11B22785B902003F6248 /* CADebugPrintf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CADebugPrintf.h; sourceTree = "<group>"; };
+		FAEA11B32785B902003F6248 /* CAGuard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CAGuard.cpp; sourceTree = "<group>"; };
+		FAEA11B42785B902003F6248 /* CAVolumeCurve.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAVolumeCurve.h; sourceTree = "<group>"; };
+		FAEA11B52785B902003F6248 /* CACFArray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CACFArray.cpp; sourceTree = "<group>"; };
+		FAEA11B72785B902003F6248 /* CADispatchQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CADispatchQueue.h; sourceTree = "<group>"; };
+		FAEA11B82785B902003F6248 /* CAHostTimeBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAHostTimeBase.h; sourceTree = "<group>"; };
+		FAEA11B92785B902003F6248 /* CACFString.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CACFString.cpp; sourceTree = "<group>"; };
+		FAEA11C72785BB73003F6248 /* SyncVoiceDriverTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyncVoiceDriverTypes.h; sourceTree = "<group>"; };
+		FAEA11CE2785BD3D003F6248 /* SV_Device.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SV_Device.cpp; sourceTree = "<group>"; };
+		FAEA11CF2785BD3D003F6248 /* SV_IOKit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SV_IOKit.cpp; sourceTree = "<group>"; };
+		FAEA11D02785BD3D003F6248 /* SV_IOKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SV_IOKit.h; sourceTree = "<group>"; };
+		FAEA11D12785BD3D003F6248 /* SV_Device.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SV_Device.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,13 +128,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FAEA117627859071003F6248 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FAEA11D42785C24A003F6248 /* CoreFoundation.framework in Frameworks */,
+				FAEA11D52785C24E003F6248 /* IOKit.framework in Frameworks */,
+				FAEA11D62785C253003F6248 /* CoreAudio.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		FA69ECEC27622A590073C027 = {
 			isa = PBXGroup;
 			children = (
+				FAEA119C2785B8BA003F6248 /* PublicUtility */,
+				FAEA118F2785941C003F6248 /* Frameworks */,
 				FA69ECF727622A590073C027 /* MetaBackground */,
+				FAEA117D2785909C003F6248 /* SyncVoice */,
 				FA69ECF627622A590073C027 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -59,6 +156,7 @@
 			isa = PBXGroup;
 			children = (
 				FA69ECF527622A590073C027 /* MetaBackground.app */,
+				FAEA117927859071003F6248 /* SnycVoice.driver */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -82,6 +180,68 @@
 			path = MetaBackground;
 			sourceTree = "<group>";
 		};
+		FAEA117D2785909C003F6248 /* SyncVoice */ = {
+			isa = PBXGroup;
+			children = (
+				FAEA11CE2785BD3D003F6248 /* SV_Device.cpp */,
+				FAEA11D12785BD3D003F6248 /* SV_Device.h */,
+				FAEA11CF2785BD3D003F6248 /* SV_IOKit.cpp */,
+				FAEA11D02785BD3D003F6248 /* SV_IOKit.h */,
+				FAEA11C72785BB73003F6248 /* SyncVoiceDriverTypes.h */,
+				FAEA11992785962E003F6248 /* SV_Object.cpp */,
+				FAEA11982785962E003F6248 /* SV_Object.h */,
+				FAEA118827859246003F6248 /* SV_PlugIn-Info.plist */,
+				FAEA118927859246003F6248 /* SV_PlugIn.cpp */,
+				FAEA118627859246003F6248 /* SV_PlugIn.h */,
+			);
+			path = SyncVoice;
+			sourceTree = "<group>";
+		};
+		FAEA118F2785941C003F6248 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FAEA119227859452003F6248 /* Accelerate.framework */,
+				FAEA119127859452003F6248 /* CoreAudio.framework */,
+				FAEA119327859452003F6248 /* CoreFoundation.framework */,
+				FAEA119427859452003F6248 /* IOKit.framework */,
+				FAEA119027859452003F6248 /* Kernel.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FAEA119C2785B8BA003F6248 /* PublicUtility */ = {
+			isa = PBXGroup;
+			children = (
+				FAEA11B52785B902003F6248 /* CACFArray.cpp */,
+				FAEA11AE2785B902003F6248 /* CACFArray.h */,
+				FAEA11AA2785B902003F6248 /* CACFDictionary.cpp */,
+				FAEA11A12785B901003F6248 /* CACFDictionary.h */,
+				FAEA11B02785B902003F6248 /* CACFNumber.cpp */,
+				FAEA11A92785B902003F6248 /* CACFNumber.h */,
+				FAEA11B12785B902003F6248 /* CACFObject.h */,
+				FAEA11B92785B902003F6248 /* CACFString.cpp */,
+				FAEA11A22785B902003F6248 /* CACFString.h */,
+				FAEA11A82785B902003F6248 /* CADebugger.cpp */,
+				FAEA11A62785B902003F6248 /* CADebugger.h */,
+				FAEA11A42785B902003F6248 /* CADebugMacros.cpp */,
+				FAEA11A02785B901003F6248 /* CADebugMacros.h */,
+				FAEA11AB2785B902003F6248 /* CADebugPrintf.cpp */,
+				FAEA11B22785B902003F6248 /* CADebugPrintf.h */,
+				FAEA11AF2785B902003F6248 /* CADispatchQueue.cpp */,
+				FAEA11B72785B902003F6248 /* CADispatchQueue.h */,
+				FAEA11A32785B902003F6248 /* CAException.h */,
+				FAEA11B32785B902003F6248 /* CAGuard.cpp */,
+				FAEA11AC2785B902003F6248 /* CAGuard.h */,
+				FAEA11AD2785B902003F6248 /* CAHostTimeBase.cpp */,
+				FAEA11B82785B902003F6248 /* CAHostTimeBase.h */,
+				FAEA11A72785B902003F6248 /* CAVolumeCurve.cpp */,
+				FAEA11B42785B902003F6248 /* CAVolumeCurve.h */,
+				FAEA119E2785B8D5003F6248 /* CAMutex.cpp */,
+				FAEA119D2785B8D5003F6248 /* CAMutex.h */,
+			);
+			path = PublicUtility;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -92,6 +252,8 @@
 				FA69ECF127622A590073C027 /* Sources */,
 				FA69ECF227622A590073C027 /* Frameworks */,
 				FA69ECF327622A590073C027 /* Resources */,
+				FA74B005278302E60084F256 /* Embed System Extensions */,
+				FAEA114F27853114003F6248 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
@@ -102,6 +264,23 @@
 			productReference = FA69ECF527622A590073C027 /* MetaBackground.app */;
 			productType = "com.apple.product-type.application";
 		};
+		FAEA117827859071003F6248 /* SnycVoice */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FAEA117A27859071003F6248 /* Build configuration list for PBXNativeTarget "SnycVoice" */;
+			buildPhases = (
+				FAEA117527859071003F6248 /* Sources */,
+				FAEA117627859071003F6248 /* Frameworks */,
+				FAEA117727859071003F6248 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SnycVoice;
+			productName = SnycVoice;
+			productReference = FAEA117927859071003F6248 /* SnycVoice.driver */;
+			productType = "com.apple.product-type.bundle";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -109,11 +288,14 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1310;
+				LastSwiftUpdateCheck = 1320;
 				LastUpgradeCheck = 1320;
 				TargetAttributes = {
 					FA69ECF427622A590073C027 = {
 						CreatedOnToolsVersion = 13.1;
+					};
+					FAEA117827859071003F6248 = {
+						CreatedOnToolsVersion = 13.2.1;
 					};
 				};
 			};
@@ -131,6 +313,7 @@
 			projectRoot = "";
 			targets = (
 				FA69ECF427622A590073C027 /* MetaBackground */,
+				FAEA117827859071003F6248 /* SnycVoice */,
 			);
 		};
 /* End PBXProject section */
@@ -142,6 +325,13 @@
 			files = (
 				FA69ECFD27622A5A0073C027 /* Assets.xcassets in Resources */,
 				FA69ED0027622A5A0073C027 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FAEA117727859071003F6248 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -161,6 +351,29 @@
 				FA8D955227625AE400B8194C /* Capturer.swift in Sources */,
 				FA69ED0A27622D3C0073C027 /* NSImageExtension.swift in Sources */,
 				FA69ECF927622A590073C027 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FAEA117527859071003F6248 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FAEA11C02785B902003F6248 /* CADispatchQueue.cpp in Sources */,
+				FAEA11D32785BD3D003F6248 /* SV_IOKit.cpp in Sources */,
+				FAEA11BE2785B902003F6248 /* CADebugPrintf.cpp in Sources */,
+				FAEA11C52785B902003F6248 /* CACFString.cpp in Sources */,
+				FAEA11BC2785B902003F6248 /* CADebugger.cpp in Sources */,
+				FAEA11BB2785B902003F6248 /* CAVolumeCurve.cpp in Sources */,
+				FAEA11C12785B902003F6248 /* CACFNumber.cpp in Sources */,
+				FAEA11C22785B902003F6248 /* CAGuard.cpp in Sources */,
+				FAEA118C27859246003F6248 /* SV_PlugIn.cpp in Sources */,
+				FAEA11C32785B902003F6248 /* CACFArray.cpp in Sources */,
+				FAEA11D22785BD3D003F6248 /* SV_Device.cpp in Sources */,
+				FAEA11BF2785B902003F6248 /* CAHostTimeBase.cpp in Sources */,
+				FAEA119A2785962E003F6248 /* SV_Object.cpp in Sources */,
+				FAEA11BA2785B902003F6248 /* CADebugMacros.cpp in Sources */,
+				FAEA11BD2785B902003F6248 /* CACFDictionary.cpp in Sources */,
+				FAEA119F2785B8D5003F6248 /* CAMutex.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -299,26 +512,27 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = MetaBackground/MetaBackground.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 39G5N7DUJH;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need Camera to capture";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "AlexJean 2021";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "AlexJean 2022";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.01;
+				MACOSX_DEPLOYMENT_TARGET = 12.1;
+				MARKETING_VERSION = 1.03;
 				PRODUCT_BUNDLE_IDENTIFIER = be.goodbrain.MetaBackground;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 			};
@@ -330,28 +544,80 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = MetaBackground/MetaBackground.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 39G5N7DUJH;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need Camera to capture";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "AlexJean 2021";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "AlexJean 2022";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.01;
+				MACOSX_DEPLOYMENT_TARGET = 12.1;
+				MARKETING_VERSION = 1.03;
 				PRODUCT_BUNDLE_IDENTIFIER = be.goodbrain.MetaBackground;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		FAEA117B27859071003F6248 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = NO;
+				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = 39G5N7DUJH;
+				EXPORTED_SYMBOLS_FILE = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "SyncVoice/SV_PlugIn-Info.plist";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSPrincipalClass = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
+				MACOSX_DEPLOYMENT_TARGET = 12.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = be.goodbrain.SnycVoice;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				WRAPPER_EXTENSION = driver;
+			};
+			name = Debug;
+		};
+		FAEA117C27859071003F6248 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = NO;
+				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = 39G5N7DUJH;
+				EXPORTED_SYMBOLS_FILE = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "SyncVoice/SV_PlugIn-Info.plist";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSPrincipalClass = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Audio/Plug-Ins/HAL";
+				MACOSX_DEPLOYMENT_TARGET = 12.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = be.goodbrain.SnycVoice;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				WRAPPER_EXTENSION = driver;
 			};
 			name = Release;
 		};
@@ -372,6 +638,15 @@
 			buildConfigurations = (
 				FA69ED0527622A5A0073C027 /* Debug */,
 				FA69ED0627622A5A0073C027 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FAEA117A27859071003F6248 /* Build configuration list for PBXNativeTarget "SnycVoice" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FAEA117B27859071003F6248 /* Debug */,
+				FAEA117C27859071003F6248 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

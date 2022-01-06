@@ -36,6 +36,17 @@ class ViewController: NSViewController{
         m_dataProcess.showDelegate = self
     }
     
+    func debugPrint() {
+        let bounds = view.bounds
+        print("view w\(bounds.width) h\(bounds.height)")
+        if let frame = view.window?.frame {
+            print("win w\(frame.width) h\(frame.height)")
+        }
+        let bounds0 = videoView.bounds
+        print("image w\(bounds0.width) h\(bounds0.height)")
+        let frame0 = videoView.frame
+        print("frame w\(frame0.width) h\(frame0.height)")
+    }
     
     private var m_captureBackTimer: Timer? = nil
     @IBAction func onClickBackgroundSelector(_ sender: Any) {
@@ -45,21 +56,22 @@ class ViewController: NSViewController{
         case "Transparent": m_dataProcess.setBlockData(false)
                             rollingBackground();
                             return
-        case "LakeView": img1 = NSImage(imageLiteralResourceName: "LakeView");                    break
-        case "DimBar":  img1 = NSImage(imageLiteralResourceName: "DimBar");                      break
+        case "LakeView": img1 = NSImage(imageLiteralResourceName: "LakeView");
+        case "DimBar":  img1 = NSImage(imageLiteralResourceName: "DimBar");
         case "Origin":  m_dataProcess.setBlockData(true)
                         // wait a while prevent background thread to set videoView.image
-                        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(200)) {
                             self.videoView.image = nil; self.msgLabel.stringValue = ""
                             self.m_capturer.linkPreview(imageView: self.videoView)
                         }
                         return
-        case "Green":   img0.fillWith(color: NSColor(red: 0.6, green: 1, blue: 0.47, alpha: 1)); break
-        case "Black":   img0.fillWith(color: NSColor.black);                                     break
+        case "Green":   img0.fillWith(color: NSColor(red: 0.6, green: 1, blue: 0.47, alpha: 1));
+        case "Black":   img0.fillWith(color: NSColor.black);
+                        debugPrint()
         case "YouSelect": img1 = chooseImageFile();
                         if img1 == nil { return }
-                        break
-        default:        img0.fillWith(color: NSColor.white);                                     break
+                        
+        default:        img0.fillWith(color: NSColor.white);
         }
         m_dataProcess.setBlockData(false)
         if m_captureBackTimer != nil {
@@ -148,7 +160,6 @@ class ViewController: NSViewController{
     override func viewWillDisappear() {
         m_capturer.stop()
     }
-    
       
     // setup constraint by panelBox.isHide
     // the topAnchor's priority of VideoView in storybord is set to 900
@@ -183,17 +194,17 @@ class ViewController: NSViewController{
         setupVideoConstraints()
         // let auto-constraints do, the left-Top is origin, I set left-bottom the origin
         let sizeWin:CGSize
-        var width0 = win.frame.width, height0 = win.frame.height
+        let width0 = win.frame.width, height0 = win.frame.height
         let offset = panelBox.frame.height
-        var imgHeight = hide ? (height0-offset) : height0
+        let imgHeight = hide ? (height0-offset) : height0
         if (hide) {
-            let width1 = imgHeight * 16 / 9
-            let height1 = width0 * 9 / 16
-            if width0 > (width1 + 0.0001) {
-                width0 = round(width1)    // 不round(), setFrame會自動進位,誤差更大
-            } else if imgHeight > (height1 + 0.0001) {
-                imgHeight = round(height1)
-            }
+//            let width1 = imgHeight * 16 / 9
+//            let height1 = width0 * 9 / 16
+//            if width0 > (width1 + 0.0001) {
+//                width0 = round(width1)    // 不round(), setFrame會自動進位,誤差更大
+//            } else if imgHeight > (height1 + 0.0001) {
+//                imgHeight = round(height1)
+//            }
             sizeWin = CGSize(width: width0, height: imgHeight)
             let winFrame = NSRect(origin: win.frame.origin, size: sizeWin)
             //debug(msg:"w\(winFrame.width)  h\(winFrame.height) x\(winFrame.origin.x) y\(winFrame.origin.y)")
@@ -204,7 +215,6 @@ class ViewController: NSViewController{
         let winFrame = NSRect(origin: win.frame.origin, size: sizeWin)
         //debug(msg:"w\(winFrame.width)  h\(winFrame.height) x\(winFrame.origin.x) y\(winFrame.origin.y)")
         win.setFrame(winFrame, display: true)  // 當autoresizeMask on時，這條會改 minY
- 
         //let constraint = NSAutoresizingMaskLayoutConstraint  // autoresizingMaskYAxisAnchor
         //view.setBoundsSize(sizeWin)    // Bounds一設，subview constraints全失效
     }
@@ -250,12 +260,21 @@ class ViewController: NSViewController{
             print("Window not found in \(#function)!")
             return
         }
-        let winOrigin = win.frame.origin
-        var h0 = view.bounds.height, y0 = winOrigin.y
-        let w0 = view.bounds.width , x0 = winOrigin.x
-        if (!panelBox.isHidden) { h0 -= panelBox.bounds.height }
+        
+//        let winOrigin = win.frame.origin
+//        var h0 = view.bounds.height, y0 = winOrigin.y
+//        let w0 = view.bounds.width , x0 = winOrigin.x
+//        if (!panelBox.isHidden) { h0 -= panelBox.bounds.height }
+//        let screenHeight = NSScreen.main?.frame.height ?? 1080
+//        let cgRect = CGRect(x:x0, y:screenHeight - y0 - h0, width: w0, height: h0)
+
+        let size0 = videoView.frame.size, origin0 = win.frame.origin
+        let h0 = size0.height, y0 = origin0.y
+        let w0 = size0.width , x0 = origin0.x
         let screenHeight = NSScreen.main?.frame.height ?? 1080
+        
         let cgRect = CGRect(x:x0, y:screenHeight - y0 - h0, width: w0, height: h0)
+
         guard let img = CGWindowListCreateImage(cgRect, [.optionOnScreenBelowWindow], windowID, [.bestResolution])
         else { return }
         let nsImage = NSImage(cgImage: img, size: CGSize(width:1280, height:720))

@@ -53,7 +53,10 @@ class DataProcess: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
     }
     
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        if (blockData) { return }
+        if (blockData) {
+            self.isRunning = false   // block了，不會進 doAlexMLHandler
+            return
+        }
         guard let pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
         guard let buf = backgroundBuffer else { return }
         doAlexMLHandler(mlConfig: mlConfig, src: pixelBuffer, background: buf)
